@@ -1,17 +1,12 @@
 /// IsoGleam FFI - HTTP Client
 /// Simple HTTP client for API calls to Qwen, NVIDIA NIMs, etc.
-
 import gleam/list
-import gleam/string
 import gleam/option.{type Option, None, Some}
+import gleam/string
 
 /// HTTP Response
 pub type Response {
-  Response(
-    status: Int,
-    headers: List(#(String, String)),
-    body: String,
-  )
+  Response(status: Int, headers: List(#(String, String)), body: BitArray)
 }
 
 /// HTTP Error
@@ -34,16 +29,12 @@ pub fn get_with_headers(
   case do_get(url, headers) {
     Ok(#(status, resp_headers, body)) ->
       Ok(Response(status, resp_headers, body))
-    Error(reason) ->
-      Error(ConnectionError(reason))
+    Error(reason) -> Error(ConnectionError(reason))
   }
 }
 
 /// Make a POST request with JSON body
-pub fn post_json(
-  url: String,
-  body: String,
-) -> Result(Response, HttpError) {
+pub fn post_json(url: String, body: String) -> Result(Response, HttpError) {
   post_json_with_headers(url, body, [])
 }
 
@@ -56,8 +47,7 @@ pub fn post_json_with_headers(
   case do_post_json(url, body, headers) {
     Ok(#(status, resp_headers, resp_body)) ->
       Ok(Response(status, resp_headers, resp_body))
-    Error(reason) ->
-      Error(ConnectionError(reason))
+    Error(reason) -> Error(ConnectionError(reason))
   }
 }
 
@@ -79,11 +69,12 @@ pub fn build_url(
   case params {
     [] -> url
     _ -> {
-      let query = list.map(params, fn(p) {
-        let #(k, v) = p
-        k <> "=" <> url_encode(v)
-      })
-      |> string.join("&")
+      let query =
+        list.map(params, fn(p) {
+          let #(k, v) = p
+          k <> "=" <> url_encode(v)
+        })
+        |> string.join("&")
       url <> "?" <> query
     }
   }
@@ -146,15 +137,18 @@ pub fn is_json(response: Response) -> Bool {
 }
 
 // Erlang FFI
+// Erlang FFI
 @external(erlang, "http_ffi", "get")
+@external(javascript, "./http_js.mjs", "do_get")
 fn do_get(
   url: String,
   headers: List(#(String, String)),
-) -> Result(#(Int, List(#(String, String)), String), String)
+) -> Result(#(Int, List(#(String, String)), BitArray), String)
 
 @external(erlang, "http_ffi", "post_json")
+@external(javascript, "../ffi/http_js.mjs", "do_post_json")
 fn do_post_json(
   url: String,
   body: String,
   headers: List(#(String, String)),
-) -> Result(#(Int, List(#(String, String)), String), String)
+) -> Result(#(Int, List(#(String, String)), BitArray), String)

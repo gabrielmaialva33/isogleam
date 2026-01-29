@@ -1,19 +1,21 @@
-/// File System FFI
-/// Helper for writing files and decoding base64
-@external(erlang, "file", "write_file")
-fn erl_write_file(path: String, data: BitArray) -> Result(Nil, term)
+import gleam/bit_array
+import gleam/result
 
-@external(erlang, "base64", "decode")
-fn erl_base64_decode(data: String) -> BitArray
+@external(erlang, "fs_ffi", "write_file")
+@external(javascript, "./fs_ffi.mjs", "write_file")
+fn do_write_file(path: String, data: BitArray) -> Result(Nil, String)
 
 pub fn write_bytes(path: String, data: BitArray) -> Result(Nil, String) {
-  case erl_write_file(path, data) {
+  case do_write_file(path, data) {
     Ok(_) -> Ok(Nil)
-    Error(_) -> Error("Failed to write file: " <> path)
+    Error(e) -> Error("Failed to write file: " <> path <> " (" <> e <> ")")
   }
 }
 
 pub fn write_base64_image(path: String, b64_data: String) -> Result(Nil, String) {
-  let bytes = erl_base64_decode(b64_data)
+  use bytes <- result.try(
+    bit_array.base64_decode(b64_data)
+    |> result.replace_error("Failed to decode Base64"),
+  )
   write_bytes(path, bytes)
 }

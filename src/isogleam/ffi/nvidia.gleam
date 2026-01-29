@@ -1,14 +1,17 @@
 /// IsoGleam FFI - AI Brain Client
 /// Connects to the local Python AI Server (running on NVIDIA 4090)
 /// Professional implementation using idiomatic Gleam patterns.
+import gleam/bit_array
 import gleam/dynamic/decode
 import gleam/int
 import gleam/json
 import gleam/list
-import gleam/option.{type Option}
+import gleam/option.{type Option, None, Some}
 import gleam/result
 import gleam/string
-import isogleam/core/config.{type Config, type GenerationMode, HuggingFace, Local, Nvidia}
+import isogleam/core/config.{
+  type Config, type GenerationMode, HuggingFace, Local, Nvidia,
+}
 import isogleam/ffi/http
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -17,12 +20,12 @@ import isogleam/ffi/http
 
 pub type NimConfig {
   NimConfig(
-    host: String, 
-    port: Int, 
-    model: String, 
+    host: String,
+    port: Int,
+    model: String,
     timeout_ms: Int,
     mode: GenerationMode,
-    api_key: Option(String)
+    api_key: Option(String),
   )
 }
 
@@ -41,8 +44,10 @@ pub type Classification {
 /// Create config from core config
 pub fn from_core(core: Config) -> NimConfig {
   NimConfig(
-    host: "localhost", // Ignored for Cloud
-    port: 8000,        // Ignored for Cloud
+    host: "localhost",
+    // Ignored for Cloud
+    port: 8000,
+    // Ignored for Cloud
     model: core.model_id,
     timeout_ms: 60_000,
     mode: core.generation_mode,
@@ -50,7 +55,7 @@ pub fn from_core(core: Config) -> NimConfig {
       Nvidia -> core.nvidia_api_key
       HuggingFace -> core.hf_token
       Local -> None
-    }
+    },
   )
 }
 
@@ -82,15 +87,20 @@ pub fn generate_tile(
   control_image_b64: Option(String),
   seed: Int,
   config: NimConfig,
-) -> Result(String, String) {
+) -> Result(BitArray, String) {
   let #(url, headers) = resolve_endpoint(config, "/generate")
-  let body_json = build_generate_request(prompt, control_image_b64, seed, config.mode)
+  let body_json =
+    build_generate_request(prompt, control_image_b64, seed, config.mode)
   let body_str = json.to_string(body_json)
 
   http.post_json_with_headers(url, body_str, headers)
   |> convert_http_error
   |> validate_response
   |> extract_image_field
+  |> result.try(fn(b64) {
+    bit_array.base64_decode(b64)
+    |> result.replace_error("Failed to decode Base64 image")
+  })
 }
 
 /// Get CLIP embedding for an image (for QA checks)
@@ -126,6 +136,64 @@ pub fn clip_classify(
   |> extract_classifications
 }
 
+/// Vision QA using Llama 3.2 Vision (NIM)
+/// Pergunta para a IA o que ela está vendo na imagem.
+pub fn vision_qa(
+  image_b64: String,
+  question: String,
+  config: NimConfig,
+) -> Result(String, String) {
+  // Endpoint para Chat Completions (padrão OpenAI) mas com Vision
+  let url = "https://integrate.api.nvidia.com/v1/chat/completions"
+  let model = "meta/llama-3.2-11b-vision-instruct"
+
+  let key = option.unwrap(config.api_key, "")
+  let headers = [
+    #("Authorization", "Bearer " <> key),
+    #("Content-Type", "application/json"),
+  ]
+
+  let body =
+    json.object([
+      #("model", json.string(model)),
+      #(
+        "messages",
+        json.preprocessed_array([
+          json.object([
+            #("role", json.string("user")),
+            #(
+              "content",
+              json.preprocessed_array([
+                json.object([
+                  #("type", json.string("text")),
+                  #("text", json.string(question)),
+                ]),
+                json.object([
+                  #("type", json.string("image_url")),
+                  #(
+                    "image_url",
+                    json.object([
+                      #(
+                        "url",
+                        json.string("data:image/png;base64," <> image_b64),
+                      ),
+                    ]),
+                  ),
+                ]),
+              ]),
+            ),
+          ]),
+        ]),
+      ),
+      #("max_tokens", json.int(100)),
+    ])
+
+  http.post_json_with_headers(url, json.to_string(body), headers)
+  |> convert_http_error
+  |> validate_response
+  |> extract_chat_content
+}
+
 /// Check if AI Brain is online
 pub fn health_check(config: NimConfig) -> Bool {
   let url = base_url(config) <> "/health"
@@ -136,15 +204,20 @@ pub fn health_check(config: NimConfig) -> Bool {
 // Internal Helpers
 // ────────────────────────────────────────────────────────────────────────────
 
-fn resolve_endpoint(config: NimConfig, path: String) -> #(String, List(#(String, String))) {
+fn resolve_endpoint(
+  config: NimConfig,
+  path: String,
+) -> #(String, List(#(String, String))) {
   case config.mode {
     Local -> {
-      let url = "http://" <> config.host <> ":" <> int.to_string(config.port) <> path
+      let url =
+        "http://" <> config.host <> ":" <> int.to_string(config.port) <> path
       #(url, [])
     }
     Nvidia -> {
       // NVIDIA NIM Endpoint for SD 3.5
-      let url = "https://ai.api.nvidia.com/v1/genai/stabilityai/stable-diffusion-3-5-large"
+      let url =
+        "https://ai.api.nvidia.com/v1/genai/stabilityai/stable-diffusion-3.5-large"
       let key = option.unwrap(config.api_key, "")
       #(url, [#("Authorization", "Bearer " <> key)])
     }
@@ -175,13 +248,10 @@ fn convert_http_error(
 
 fn validate_response(
   result: Result(http.Response, String),
-) -> Result(String, String) {
+) -> Result(BitArray, String) {
   case result {
     Ok(resp) if resp.status == 200 -> Ok(resp.body)
-    Ok(resp) ->
-      Error(
-        "Server returned " <> int.to_string(resp.status) <> ": " <> resp.body,
-      )
+    Ok(resp) -> Error("Server returned " <> int.to_string(resp.status))
     Error(err) -> Error("HTTP request failed: " <> err)
   }
 }
@@ -193,7 +263,7 @@ fn build_generate_request(
   mode: GenerationMode,
 ) -> json.Json {
   case mode {
-    Local -> 
+    Local ->
       json.object([
         #("prompt", json.string(prompt)),
         #("width", json.int(512)),
@@ -205,28 +275,37 @@ fn build_generate_request(
           option.None -> json.null()
         }),
       ])
-    
+
     Nvidia ->
       // NVIDIA Payload format (Standard GenAI)
       json.object([
-        #("text_prompts", json.preprocessed_array([
-          json.object([#("text", json.string(prompt)), #("weight", json.float(1.0))])
-        ])),
+        #(
+          "text_prompts",
+          json.preprocessed_array([
+            json.object([
+              #("text", json.string(prompt)),
+              #("weight", json.float(1.0)),
+            ]),
+          ]),
+        ),
         #("cfg_scale", json.float(5.0)),
         #("seed", json.int(seed)),
         #("sampler", json.string("K_EULER_ANCESTRAL")),
-        #("steps", json.int(25))
+        #("steps", json.int(25)),
       ])
 
     HuggingFace ->
       // HF Inference Payload
       json.object([
         #("inputs", json.string(prompt)),
-        #("parameters", json.object([
-           #("negative_prompt", json.string("blurry, low quality")),
-           #("num_inference_steps", json.int(25)),
-           #("guidance_scale", json.float(7.5))
-        ]))
+        #(
+          "parameters",
+          json.object([
+            #("negative_prompt", json.string("blurry, low quality")),
+            #("num_inference_steps", json.int(25)),
+            #("guidance_scale", json.float(7.5)),
+          ]),
+        ),
       ])
   }
 }
@@ -242,15 +321,20 @@ fn build_classify_request(image_b64: String, labels: List(String)) -> json.Json 
 // Field Extractors & Decoders
 // ────────────────────────────────────────────────────────────────────────────
 
-fn extract_image_field(result: Result(String, String)) -> Result(String, String) {
+fn extract_image_field(
+  result: Result(BitArray, String),
+) -> Result(String, String) {
   case result {
     Ok(body) -> {
+      use body_str <- result.try(
+        bit_array.to_string(body) |> result.replace_error("Invalid UTF-8"),
+      )
       let decoder = {
         use image <- decode.field("image_b64", decode.string)
         decode.success(image)
       }
 
-      json.parse(body, decoder)
+      json.parse(body_str, decoder)
       |> result.map_error(format_json_error)
     }
     Error(err) -> Error(err)
@@ -258,17 +342,20 @@ fn extract_image_field(result: Result(String, String)) -> Result(String, String)
 }
 
 fn extract_embedding_field(
-  result: Result(String, String),
+  result: Result(BitArray, String),
 ) -> Result(ClipEmbedding, String) {
   case result {
     Ok(body) -> {
+      use body_str <- result.try(
+        bit_array.to_string(body) |> result.replace_error("Invalid UTF-8"),
+      )
       let decoder = {
         use vector <- decode.field("embedding", decode.list(decode.float))
         use dimensions <- decode.field("dimensions", decode.int)
         decode.success(ClipEmbedding(vector: vector, dimensions: dimensions))
       }
 
-      json.parse(body, decoder)
+      json.parse(body_str, decoder)
       |> result.map_error(format_json_error)
     }
     Error(err) -> Error(err)
@@ -276,10 +363,13 @@ fn extract_embedding_field(
 }
 
 fn extract_classifications(
-  result: Result(String, String),
+  result: Result(BitArray, String),
 ) -> Result(List(Classification), String) {
   case result {
     Ok(body) -> {
+      use body_str <- result.try(
+        bit_array.to_string(body) |> result.replace_error("Invalid UTF-8"),
+      )
       let decoder =
         decode.list({
           use label <- decode.field("label", decode.string)
@@ -287,8 +377,39 @@ fn extract_classifications(
           decode.success(Classification(label: label, confidence: confidence))
         })
 
-      json.parse(body, decoder)
+      json.parse(body_str, decoder)
       |> result.map_error(format_json_error)
+    }
+    Error(err) -> Error(err)
+  }
+}
+
+fn extract_chat_content(
+  result: Result(BitArray, String),
+) -> Result(String, String) {
+  case result {
+    Ok(body) -> {
+      use body_str <- result.try(
+        bit_array.to_string(body) |> result.replace_error("Invalid UTF-8"),
+      )
+      let message_decoder = {
+        use content <- decode.field("content", decode.string)
+        decode.success(content)
+      }
+
+      let choice_decoder = {
+        use message <- decode.field("message", message_decoder)
+        decode.success(message)
+      }
+
+      let decoder = {
+        use choices <- decode.field("choices", decode.list(choice_decoder))
+        case choices {
+          [content, ..] -> decode.success(content)
+          [] -> decode.success("Error: No choices")
+        }
+      }
+      json.parse(body_str, decoder) |> result.map_error(format_json_error)
     }
     Error(err) -> Error(err)
   }
