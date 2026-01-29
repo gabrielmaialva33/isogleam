@@ -5,14 +5,13 @@
 /// - Pure Gleam para lógica de coordenação
 /// - FFI para Python (geração IA) e Elixir (GPU)
 /// - Pipeline: OSM → Render → IA → Tiles → Viewer
-
-import gleam/io
-import gleam/int
 import gleam/float
+import gleam/int
+import gleam/io
 import gleam/option.{None, Some}
-import isogleam/config.{type Config}
-import isogleam/grid.{type Grid}
-import isogleam/tile
+import isogleam/core/config.{type Config}
+import isogleam/core/grid.{type Grid}
+import isogleam/core/tile
 import isogleam/infill
 
 /// Estado do gerador
@@ -50,7 +49,11 @@ pub fn next_tile(state: GeneratorState) -> option.Option(tile.IsoCoord) {
 }
 
 /// Marca tile como gerado
-pub fn mark_generated(state: GeneratorState, coord: tile.IsoCoord, image_path: String) -> GeneratorState {
+pub fn mark_generated(
+  state: GeneratorState,
+  coord: tile.IsoCoord,
+  image_path: String,
+) -> GeneratorState {
   case grid.get_tile(state.grid, coord) {
     None -> state
     Some(t) -> {
@@ -62,7 +65,11 @@ pub fn mark_generated(state: GeneratorState, coord: tile.IsoCoord, image_path: S
 }
 
 /// Marca tile como falhou
-pub fn mark_failed(state: GeneratorState, coord: tile.IsoCoord, reason: String) -> GeneratorState {
+pub fn mark_failed(
+  state: GeneratorState,
+  coord: tile.IsoCoord,
+  reason: String,
+) -> GeneratorState {
   case grid.get_tile(state.grid, coord) {
     None -> state
     Some(t) -> {
@@ -92,12 +99,25 @@ pub fn stats(state: GeneratorState) -> String {
   let pct = progress(state) *. 100.0
 
   "IsoGleam Stats:\n"
-  <> "  Grid: " <> int.to_string(state.config.grid_width) <> "x" <> int.to_string(state.config.grid_height) <> "\n"
-  <> "  Total tiles: " <> int.to_string(total) <> "\n"
-  <> "  Generated: " <> int.to_string(generated) <> "\n"
-  <> "  Pending: " <> int.to_string(pending) <> "\n"
-  <> "  Progress: " <> float.to_string(pct) <> "%\n"
-  <> "  Errors: " <> int.to_string(list.length(state.errors))
+  <> "  Grid: "
+  <> int.to_string(state.config.grid_width)
+  <> "x"
+  <> int.to_string(state.config.grid_height)
+  <> "\n"
+  <> "  Total tiles: "
+  <> int.to_string(total)
+  <> "\n"
+  <> "  Generated: "
+  <> int.to_string(generated)
+  <> "\n"
+  <> "  Pending: "
+  <> int.to_string(pending)
+  <> "\n"
+  <> "  Progress: "
+  <> float.to_string(pct)
+  <> "%\n"
+  <> "  Errors: "
+  <> int.to_string(list.length(state.errors))
 }
 
 import gleam/list
@@ -121,7 +141,9 @@ pub fn main() -> Nil {
   let order = infill.generation_order(state.grid, infill.SpiralFromCorner)
   list.take(order, 10)
   |> list.each(fn(c) {
-    io.println("  -> (" <> int.to_string(c.x) <> ", " <> int.to_string(c.y) <> ")")
+    io.println(
+      "  -> (" <> int.to_string(c.x) <> ", " <> int.to_string(c.y) <> ")",
+    )
   })
 
   io.println("")

@@ -6,12 +6,11 @@
 /// 2. Expande em espiral para o centro
 /// 3. Cada tile gerado inclui bordas dos vizinhos como contexto
 /// 4. Máscara de 25% nas bordas para blending seamless
-
-import gleam/list
 import gleam/int
+import gleam/list
 import gleam/option.{type Option, None, Some}
-import isogleam/tile.{type Tile, type IsoCoord, IsoCoord, Generated}
-import isogleam/grid.{type Grid}
+import isogleam/core/grid.{type Grid}
+import isogleam/core/tile.{type IsoCoord, type Tile, Generated, IsoCoord}
 
 /// Estratégia de geração
 pub type GenerationStrategy {
@@ -39,11 +38,7 @@ pub type InfillContext {
 
 /// Dados da borda de um tile vizinho
 pub type BorderData {
-  BorderData(
-    image_path: String,
-    edge: Edge,
-    width: Int,
-  )
+  BorderData(image_path: String, edge: Edge, width: Int)
 }
 
 /// Qual borda do vizinho usar
@@ -60,7 +55,8 @@ pub fn generation_order(g: Grid, strategy: GenerationStrategy) -> List(IsoCoord)
     SpiralFromCorner -> spiral_from_corner(g.width, g.height)
     SpiralFromCenter -> spiral_from_center(g.width, g.height)
     RowByRow -> row_by_row(g.width, g.height)
-    Random -> row_by_row(g.width, g.height)  // TODO: shuffle
+    Random -> row_by_row(g.width, g.height)
+    // TODO: shuffle
   }
 }
 
@@ -119,7 +115,11 @@ fn row_by_row(width: Int, height: Int) -> List(IsoCoord) {
 }
 
 /// Cria contexto de infill para um tile
-pub fn create_context(g: Grid, coord: IsoCoord, mask_pct: Float) -> Option(InfillContext) {
+pub fn create_context(
+  g: Grid,
+  coord: IsoCoord,
+  mask_pct: Float,
+) -> Option(InfillContext) {
   case grid.get_tile(g, coord) {
     None -> None
     Some(target) -> {
@@ -142,7 +142,11 @@ pub fn create_context(g: Grid, coord: IsoCoord, mask_pct: Float) -> Option(Infil
 }
 
 /// Busca borda de um vizinho se ele já foi gerado
-fn get_neighbor_border(g: Grid, maybe_coord: Option(IsoCoord), edge: Edge) -> Option(BorderData) {
+fn get_neighbor_border(
+  g: Grid,
+  maybe_coord: Option(IsoCoord),
+  edge: Edge,
+) -> Option(BorderData) {
   case maybe_coord {
     None -> None
     Some(coord) -> {
@@ -153,11 +157,13 @@ fn get_neighbor_border(g: Grid, maybe_coord: Option(IsoCoord), edge: Edge) -> Op
             Generated -> {
               case neighbor.image_path {
                 None -> None
-                Some(path) -> Some(BorderData(
-                  image_path: path,
-                  edge: edge,
-                  width: 128,  // 25% de 512px
-                ))
+                Some(path) ->
+                  Some(BorderData(
+                    image_path: path,
+                    edge: edge,
+                    width: 128,
+                    // 25% de 512px
+                  ))
               }
             }
             _ -> None
