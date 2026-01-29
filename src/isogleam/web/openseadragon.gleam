@@ -46,6 +46,8 @@ pub type TileConfig {
     min_level: Int,
     max_level: Int,
     url_template: String,
+    x_offset: Int,
+    y_offset: Int,
   )
 }
 

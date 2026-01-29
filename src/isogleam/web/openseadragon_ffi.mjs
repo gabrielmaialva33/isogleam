@@ -84,11 +84,17 @@ export function loadCustomTileSource(viewer, tileConfig) {
     minLevel: tileConfig.minLevel || 0,
     maxLevel: tileConfig.maxLevel,
     getTileUrl: function (level, x, y) {
-      // Template: {z}/{x}/{y}.webp
+      // Apply offsets if defined
+      const offsetX = tileConfig.xOffset || 0;
+      const offsetY = tileConfig.yOffset || 0;
+      const finalX = x + offsetX;
+      const finalY = y + offsetY;
+
+      // Template: {z}/{x}/{y}.webp or tile_{x}_{y}.png
       return tileConfig.urlTemplate
         .replace("{z}", level)
-        .replace("{x}", x)
-        .replace("{y}", y);
+        .replace("{x}", finalX)
+        .replace("{y}", finalY);
     }
   });
 }

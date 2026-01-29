@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IsoGleam Viewer</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #1e1e2e;
+      color: #e0e0e0;
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    }
+    #app {
+      width: 100%;
+      height: 100%;
+    }
+    .error-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #ff6b6b;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script type="module">
+    console.log("🚀 Starting IsoGleam Viewer...");
+    
+    // Import the Gleam application
+    // Using double-nested path to match build artifact structure
+    import { main } from "./isogleam/isogleam/web/viewer_app.mjs";
+
+    try {
+      main();
+      console.log("✅ IsoGleam app initialized");
+    } catch (error) {
+      console.error("❌ Failed to start app:", error);
+      document.getElementById("app").innerHTML = `
+        <div class="error-container">
+          <p>Erro ao carregar - Failed to load app: ${error.message}</p>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

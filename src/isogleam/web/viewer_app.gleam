@@ -32,8 +32,18 @@ pub fn init(_flags) -> #(Model, Effect(Msg)) {
   let model =
     Model(
       viewer: None,
-      // Default to DZI from public folder
-      tile_source: DziSource("/tiles.dzi"),
+      // Use CustomSource with scanned grid dimensions
+      tile_source: CustomSource(osd.TileConfig(
+        url_template: "tiles/tile_{x}_{y}.png",
+        // Total Width: 15872, Total Height: 17920
+        width: 15_872,
+        height: 17_920,
+        tile_size: 512,
+        min_level: Some(0),
+        max_level: Some(0),
+        x_offset: 15,
+        y_offset: 8,
+      )),
       status: Loading,
     )
 
