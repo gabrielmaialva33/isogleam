@@ -69,6 +69,7 @@ class ClipEmbedRequest(BaseModel):
 
 class ClipEmbedResponse(BaseModel):
     embedding: List[float]
+    dimensions: int
 
 class ClassifyRequest(BaseModel):
     image_b64: str
@@ -212,15 +213,15 @@ def generate(req: GenerateRequest):
         # conditioning_scale of 1.0-1.2 provides strong structural guidance
         # while still allowing the model creative freedom for textures/details
         args["controlnet_conditioning_scale"] = 1.0
+    else:
+        logger.info("No control image provided. Using blank (black) image for pure T2I.")
+        # Create a blank black image with the requested dimensions
+        blank_image = Image.new("RGB", (req.width, req.height), (0, 0, 0))
+        args["image"] = blank_image
+        # When using a blank image, controlnet_conditioning_scale should be 0
+        # to effectively disable ControlNet's influence, making it a T2I generation.
+        args["controlnet_conditioning_scale"] = 0.0
 
-    # Run inference
-    # Note: If control_image is None, this pipeline might fail if it's strictly a ControlNetPipeline.
-    # In a full prod version, we'd check and use a txt2img pipe if no control image.
-    # For IsoGleam, we almost ALWAYS have a render guide.
-    if control_image is None:
-        # Fallback or error? Let's just create a blank black image for now or error.
-        # Better: Create a dummy or handle it.
-        raise HTTPException(status_code=400, detail="Control Image is required for Isogleam Pipeline")
 
     result = pipe(**args).images[0]
 
@@ -242,7 +243,7 @@ def clip_embed(req: ClipEmbedRequest):
     image_features = image_features / image_features.norm(p=2, dim=-1, keepdim=True)
     embedding = image_features.cpu().numpy().tolist()[0]
 
-    return ClipEmbedResponse(embedding=embedding)
+    return ClipEmbedResponse(embedding=embedding, dimensions=len(embedding))
 
 @app.post("/clip/classify", response_model=ClassificationResponse)
 def clip_classify(req: ClassifyRequest):
