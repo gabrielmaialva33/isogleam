@@ -66,7 +66,10 @@ pub fn resize_nearest(
         False -> Error(tensor.ShapeMismatch(shape, [target_h, target_w, c]))
       }
     }
-    _ -> Error(tensor.InvalidShape("Expected [H, W, C], got: " <> shape_to_string(shape)))
+    _ ->
+      Error(tensor.InvalidShape(
+        "Expected [H, W, C], got: " <> shape_to_string(shape),
+      ))
   }
 }
 
@@ -118,12 +121,14 @@ pub fn sobel_edges(img: Tensor) -> Result(Tensor, TensorError) {
   use sum_sq <- result.try(t.add(x_sq, y_sq))
 
   // sqrt via map
-  Ok(t.map(sum_sq, fn(v) {
-    case v >=. 0.0 {
-      True -> float_sqrt(v)
-      False -> 0.0
-    }
-  }))
+  Ok(
+    t.map(sum_sq, fn(v) {
+      case v >=. 0.0 {
+        True -> float_sqrt(v)
+        False -> 0.0
+      }
+    }),
+  )
 }
 
 /// Sqrt aproximado via Newton-Raphson (1 iteração)
@@ -147,11 +152,13 @@ pub fn laplacian_edges(img: Tensor) -> Result(Tensor, TensorError) {
 
 /// Aplica blur gaussiano 3x3
 pub fn gaussian_blur(img: Tensor) -> Result(Tensor, TensorError) {
-  let kernel = case t.from_list2d([
-    [1.0 /. 16.0, 2.0 /. 16.0, 1.0 /. 16.0],
-    [2.0 /. 16.0, 4.0 /. 16.0, 2.0 /. 16.0],
-    [1.0 /. 16.0, 2.0 /. 16.0, 1.0 /. 16.0],
-  ]) {
+  let kernel = case
+    t.from_list2d([
+      [1.0 /. 16.0, 2.0 /. 16.0, 1.0 /. 16.0],
+      [2.0 /. 16.0, 4.0 /. 16.0, 2.0 /. 16.0],
+      [1.0 /. 16.0, 2.0 /. 16.0, 1.0 /. 16.0],
+    ])
+  {
     Ok(k) -> k
     Error(_) -> t.zeros([3, 3])
   }
@@ -162,11 +169,13 @@ pub fn gaussian_blur(img: Tensor) -> Result(Tensor, TensorError) {
 
 /// Sharpen (aumenta nitidez)
 pub fn sharpen(img: Tensor) -> Result(Tensor, TensorError) {
-  let kernel = case t.from_list2d([
-    [0.0, -1.0, 0.0],
-    [-1.0, 5.0, -1.0],
-    [0.0, -1.0, 0.0],
-  ]) {
+  let kernel = case
+    t.from_list2d([
+      [0.0, -1.0, 0.0],
+      [-1.0, 5.0, -1.0],
+      [0.0, -1.0, 0.0],
+    ])
+  {
     Ok(k) -> k
     Error(_) -> t.zeros([3, 3])
   }
@@ -177,11 +186,11 @@ pub fn sharpen(img: Tensor) -> Result(Tensor, TensorError) {
 
 /// Extrai patch de uma imagem
 pub fn extract_patch(
-  img: Tensor,
-  x: Int,
-  y: Int,
-  w: Int,
-  h: Int,
+  _img: Tensor,
+  _x: Int,
+  _y: Int,
+  _w: Int,
+  _h: Int,
 ) -> Result(Tensor, String) {
   // TODO: Implementar slicing
   // Por agora, retorna erro
@@ -195,7 +204,7 @@ pub fn pad_to_multiple(
 ) -> Result(Tensor, TensorError) {
   let shape = t.shape(img)
   case shape {
-    [h, w, c] -> {
+    [h, w, _c] -> {
       let pad_h = case h % multiple {
         0 -> 0
         r -> multiple - r
@@ -209,8 +218,8 @@ pub fn pad_to_multiple(
         True -> Ok(img)
         False -> {
           // Criar tensor maior com zeros e copiar
-          let new_h = h + pad_h
-          let new_w = w + pad_w
+          let _new_h = h + pad_h
+          let _new_w = w + pad_w
 
           // Por agora, apenas reshape se não precisar padding
           // TODO: implementar padding real
@@ -218,18 +227,19 @@ pub fn pad_to_multiple(
         }
       }
     }
-    _ -> Error(tensor.InvalidShape("Expected [H, W, C], got: " <> shape_to_string(shape)))
+    _ ->
+      Error(tensor.InvalidShape(
+        "Expected [H, W, C], got: " <> shape_to_string(shape),
+      ))
   }
 }
 
 /// Prepara imagem para inference SD
 /// Faz: normalize + pad + reshape para [1, C, H, W] (batch format)
-pub fn prepare_for_inference(
-  img: Tensor,
-) -> Result(Tensor, TensorError) {
+pub fn prepare_for_inference(img: Tensor) -> Result(Tensor, TensorError) {
   let shape = t.shape(img)
   case shape {
-    [h, w, c] -> {
+    [_h, _w, _c] -> {
       // 1. Normaliza para [-1, 1]
       let normalized = normalize_for_sd(img)
 
@@ -241,18 +251,23 @@ pub fn prepare_for_inference(
       let padded_shape = t.shape(padded)
       case padded_shape {
         [ph, pw, pc] -> t.reshape(padded, [1, pc, ph, pw])
-        _ -> Error(tensor.InvalidShape("Expected [H, W, C] after padding, got: " <> shape_to_string(padded_shape)))
+        _ ->
+          Error(tensor.InvalidShape(
+            "Expected [H, W, C] after padding, got: "
+            <> shape_to_string(padded_shape),
+          ))
       }
     }
-    _ -> Error(tensor.InvalidShape("Expected [H, W, C], got: " <> shape_to_string(shape)))
+    _ ->
+      Error(tensor.InvalidShape(
+        "Expected [H, W, C], got: " <> shape_to_string(shape),
+      ))
   }
 }
 
 /// Desfaz prepare_for_inference
 /// [1, C, H, W] -> [H, W, C] e desnormaliza
-pub fn unpack_from_inference(
-  tensor: Tensor,
-) -> Result(Tensor, TensorError) {
+pub fn unpack_from_inference(tensor: Tensor) -> Result(Tensor, TensorError) {
   let shape = t.shape(tensor)
   case shape {
     [1, c, h, w] -> {
@@ -264,11 +279,14 @@ pub fn unpack_from_inference(
       let clamped = clamp_image(denorm)
       Ok(clamped)
     }
-    [c, h, w] -> {
+    [_c, _h, _w] -> {
       let denorm = denormalize_from_sd(tensor)
       let clamped = clamp_image(denorm)
       Ok(clamped)
     }
-    _ -> Error(tensor.InvalidShape("Expected [H, W, C], got: " <> shape_to_string(shape)))
+    _ ->
+      Error(tensor.InvalidShape(
+        "Expected [H, W, C], got: " <> shape_to_string(shape),
+      ))
   }
 }

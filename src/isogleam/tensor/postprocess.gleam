@@ -4,7 +4,6 @@
 import gleam/float
 import gleam/int
 import gleam/list
-import gleam/result
 import viva_tensor as t
 import viva_tensor/tensor.{type Tensor, type TensorError}
 
@@ -126,7 +125,7 @@ pub fn find_nearest_color(color: Color, palette: Palette) -> Color {
     [] -> color
     [first, ..rest] -> {
       list.fold(rest, #(first, color_distance(color, first)), fn(acc, c) {
-        let #(best, best_dist) = acc
+        let #(_, best_dist) = acc
         let dist = color_distance(color, c)
         case dist <. best_dist {
           True -> #(c, dist)
@@ -164,16 +163,12 @@ fn do_extract_colors(data: List(Float), acc: List(Color)) -> List(Color) {
 }
 
 /// Valida se todas as cores de uma imagem estão na paleta
-pub fn validate_palette(
-  img: Tensor,
-  palette: Palette,
-) -> PaletteValidation {
+pub fn validate_palette(img: Tensor, palette: Palette) -> PaletteValidation {
   let data = t.to_list(img)
   let colors = extract_unique_colors(data)
   let total = list.length(colors)
 
-  let invalid =
-    list.filter(colors, fn(c) { !is_in_palette(c, palette) })
+  let invalid = list.filter(colors, fn(c) { !is_in_palette(c, palette) })
   let invalid_count = list.length(invalid)
 
   PaletteValidation(
@@ -186,10 +181,7 @@ pub fn validate_palette(
 
 /// Quantiza imagem para paleta (sem dithering)
 /// Cada pixel é mapeado para a cor mais próxima
-pub fn quantize_to_palette(
-  img: Tensor,
-  palette: Palette,
-) -> Tensor {
+pub fn quantize_to_palette(img: Tensor, _palette: Palette) -> Tensor {
   t.map(img, fn(value) {
     // Assume que estamos processando um valor de canal por vez
     // Para quantização real, precisaríamos processar RGB junto
@@ -222,10 +214,7 @@ pub fn dither_floyd_steinberg(
 
 /// Dithering ordenado (Bayer matrix) - mais simples que F-S
 /// Adiciona ruído sistemático antes de quantizar
-pub fn dither_ordered(
-  img: Tensor,
-  palette: Palette,
-) -> Tensor {
+pub fn dither_ordered(img: Tensor, palette: Palette) -> Tensor {
   // Bayer matrix 4x4 (normalizada para [0, 1])
   // Por agora, apenas quantiza
   quantize_to_palette(img, palette)
@@ -262,8 +251,7 @@ pub fn validate_pixel_art(
   let has_antialiasing = palette_check.invalid_colors > color_count / 10
 
   PixelArtValidation(
-    valid: color_count <=
-      max_colors && palette_check.valid && !has_antialiasing,
+    valid: color_count <= max_colors && palette_check.valid && !has_antialiasing,
     color_count: color_count,
     max_colors: max_colors,
     has_antialiasing: has_antialiasing,
