@@ -122,10 +122,11 @@ pub fn get_neighbors(
   |> dict.insert("west", get(store, west))
 }
 
+import gleam/int
+
+// ...
+
 // Helper
 fn coord_to_key(coord: IsoCoord) -> String {
-  int_to_string(coord.x) <> "_" <> int_to_string(coord.y)
+  int.to_string(coord.x) <> "_" <> int.to_string(coord.y)
 }
-
-@external(erlang, "erlang", "integer_to_binary")
-fn int_to_string(n: Int) -> String

@@ -2,6 +2,7 @@ import gleam/int
 import gleam/io
 import gleam/option.{None}
 import gleam/string
+import isogleam/ffi/fs
 import isogleam/ffi/nvidia
 
 pub fn main() {
@@ -27,13 +28,20 @@ pub fn main() {
   io.println("   This will take ~2-3s on RTX 4090...\n")
 
   case nvidia.generate_tile("brick building with red roof", None, 42, config) {
-    Ok(_image_b64) -> {
-      io.println("❌ Unexpected success - JSON parsing should fail!")
-      io.println("   (Client currently returns placeholder)\n")
+    Ok(image_b64) -> {
+      io.println("✅ Image generated successfully!")
+      io.println("   Base64 check: " <> string.slice(image_b64, 0, 20) <> "...")
+
+      // Save for humiliation proof
+      // Save for humiliation proof
+      case fs.write_base64_image("humiliation_proof.png", image_b64) {
+        Ok(_) -> io.println("💾 Saved to humiliation_proof.png")
+        Error(_) -> io.println("❌ Failed to save base64 image")
+      }
     }
     Error(err) -> {
-      io.println("⚠️  Expected error (JSON parsing not implemented):")
-      io.println("   " <> err <> "\n")
+      io.println("❌ Generation failed:")
+      io.println("   Error: " <> err <> "\n")
     }
   }
 
