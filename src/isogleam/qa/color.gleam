@@ -1,6 +1,5 @@
 /// IsoGleam QA - Color Module
 /// Pure Gleam color types and operations
-
 import gleam/int
 import gleam/list
 import gleam/string
@@ -31,10 +30,7 @@ pub fn to_tuple(c: RGB) -> #(Int, Int, Int) {
 
 /// Convert RGB to hex string
 pub fn to_hex(c: RGB) -> Hex {
-  "#"
-  <> int_to_hex(c.r)
-  <> int_to_hex(c.g)
-  <> int_to_hex(c.b)
+  "#" <> int_to_hex(c.r) <> int_to_hex(c.g) <> int_to_hex(c.b)
 }
 
 /// Convert hex string to RGB
@@ -155,4 +151,5 @@ fn hex_char_to_int(c: String) -> Result(Int, Nil) {
 
 // FFI for sqrt
 @external(erlang, "math", "sqrt")
+@external(javascript, "../qa/color_ffi.mjs", "sqrt")
 fn sqrt(x: Float) -> Float

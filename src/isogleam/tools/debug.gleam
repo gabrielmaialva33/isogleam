@@ -1,15 +1,14 @@
 /// IsoGleam Tools - Debug Module
 /// Micro-tools for tile inspection and debugging
 /// Inspired by Isometric NYC's approach of building many small tools
-
-import gleam/list
-import gleam/int
-import gleam/float
-import gleam/string
 import gleam/dict
+import gleam/float
+import gleam/int
+import gleam/list
+import gleam/string
+import isogleam/qa/checker.{type Check, type QAResult}
 import isogleam/qa/color.{type RGB, RGB}
 import isogleam/qa/pixel.{type ImageData}
-import isogleam/qa/checker.{type QAResult, type Check}
 
 /// Debug output formats
 pub type DebugFormat {
@@ -25,23 +24,20 @@ pub type DebugFormat {
 
 /// Color histogram entry
 pub type HistogramEntry {
-  HistogramEntry(
-    color: RGB,
-    count: Int,
-    percentage: Float,
-  )
+  HistogramEntry(color: RGB, count: Int, percentage: Float)
 }
 
 /// Generate color histogram
 pub fn color_histogram(img: ImageData) -> List(HistogramEntry) {
-  let counts = list.fold(img.pixels, dict.new(), fn(acc, px) {
-    let key = rgb_to_key(px)
-    let current = case dict.get(acc, key) {
-      Ok(n) -> n
-      Error(_) -> 0
-    }
-    dict.insert(acc, key, current + 1)
-  })
+  let counts =
+    list.fold(img.pixels, dict.new(), fn(acc, px) {
+      let key = rgb_to_key(px)
+      let current = case dict.get(acc, key) {
+        Ok(n) -> n
+        Error(_) -> 0
+      }
+      dict.insert(acc, key, current + 1)
+    })
 
   let total = list.length(img.pixels)
 
@@ -102,10 +98,18 @@ pub fn visualize_borders(img: ImageData) -> String {
   let west = sample_border_colors(img, 0, 0, 1, h)
 
   string.concat([
-    "North: ", colors_to_ansi(north), "\n",
-    "South: ", colors_to_ansi(south), "\n",
-    "East:  ", colors_to_ansi(east), "\n",
-    "West:  ", colors_to_ansi(west), "\n",
+    "North: ",
+    colors_to_ansi(north),
+    "\n",
+    "South: ",
+    colors_to_ansi(south),
+    "\n",
+    "East:  ",
+    colors_to_ansi(east),
+    "\n",
+    "West:  ",
+    colors_to_ansi(west),
+    "\n",
   ])
 }
 
@@ -129,8 +133,13 @@ fn sample_border_colors(
 fn colors_to_ansi(colors: List(RGB)) -> String {
   list.map(colors, fn(c) {
     // ANSI 24-bit color block
-    "\u{001b}[48;2;" <> int_to_str(c.r) <> ";" <>
-    int_to_str(c.g) <> ";" <> int_to_str(c.b) <> "m  \u{001b}[0m"
+    "\u{001b}[48;2;"
+    <> int_to_str(c.r)
+    <> ";"
+    <> int_to_str(c.g)
+    <> ";"
+    <> int_to_str(c.b)
+    <> "m  \u{001b}[0m"
   })
   |> string.concat
 }
@@ -153,8 +162,12 @@ fn format_qa_plain(result: QAResult) -> String {
 
   string.concat([
     "=== QA Result ===\n",
-    "Status: ", status, "\n",
-    "Overall Score: ", float_to_str(result.score *. 100.0), "%\n",
+    "Status: ",
+    status,
+    "\n",
+    "Overall Score: ",
+    float_to_str(result.score *. 100.0),
+    "%\n",
     "\nChecks:\n",
     format_checks_plain(result.checks),
     "\nErrors:\n",
@@ -164,8 +177,10 @@ fn format_qa_plain(result: QAResult) -> String {
 
 fn format_qa_ansi(result: QAResult) -> String {
   let status_color = case result.passed {
-    True -> "\u{001b}[32m"   // Green
-    False -> "\u{001b}[31m"  // Red
+    True -> "\u{001b}[32m"
+    // Green
+    False -> "\u{001b}[31m"
+    // Red
   }
   let reset = "\u{001b}[0m"
 
@@ -176,8 +191,14 @@ fn format_qa_ansi(result: QAResult) -> String {
 
   string.concat([
     "=== QA Result ===\n",
-    "Status: ", status_color, status, reset, "\n",
-    "Score: ", score_to_ansi(result.score), "\n",
+    "Status: ",
+    status_color,
+    status,
+    reset,
+    "\n",
+    "Score: ",
+    score_to_ansi(result.score),
+    "\n",
     "\nChecks:\n",
     format_checks_ansi(result.checks),
   ])
@@ -186,11 +207,15 @@ fn format_qa_ansi(result: QAResult) -> String {
 fn score_to_ansi(score: Float) -> String {
   let reset = "\u{001b}[0m"
   let color = case score >=. 0.9 {
-    True -> "\u{001b}[32m"  // Green
-    False -> case score >=. 0.7 {
-      True -> "\u{001b}[33m"   // Yellow
-      False -> "\u{001b}[31m"  // Red
-    }
+    True -> "\u{001b}[32m"
+    // Green
+    False ->
+      case score >=. 0.7 {
+        True -> "\u{001b}[33m"
+        // Yellow
+        False -> "\u{001b}[31m"
+        // Red
+      }
   }
   color <> float_to_str(score *. 100.0) <> "%" <> reset
 }
@@ -202,20 +227,31 @@ fn format_qa_html(result: QAResult) -> String {
   }
 
   string.concat([
-    "<div class=\"qa-result ", status_class, "\">\n",
+    "<div class=\"qa-result ",
+    status_class,
+    "\">\n",
     "  <h2>QA Result</h2>\n",
     "  <p class=\"score\">Score: ",
-    float_to_str(result.score *. 100.0), "%</p>\n",
+    float_to_str(result.score *. 100.0),
+    "%</p>\n",
     "</div>\n",
   ])
 }
 
 fn format_qa_json(result: QAResult) -> String {
   string.concat([
-    "{\"passed\":", bool_to_str(result.passed), ",",
-    "\"score\":", float_to_str(result.score), ",",
-    "\"checks\":", int_to_str(list.length(result.checks)), ",",
-    "\"errors\":", int_to_str(list.length(result.errors)), "}",
+    "{\"passed\":",
+    bool_to_str(result.passed),
+    ",",
+    "\"score\":",
+    float_to_str(result.score),
+    ",",
+    "\"checks\":",
+    int_to_str(list.length(result.checks)),
+    ",",
+    "\"errors\":",
+    int_to_str(list.length(result.errors)),
+    "}",
   ])
 }
 
@@ -257,12 +293,13 @@ fn format_errors_plain(errors: List(String)) -> String {
 pub fn diff_tiles(a: ImageData, b: ImageData) -> String {
   let total = int.min(list.length(a.pixels), list.length(b.pixels))
 
-  let diffs = list.map2(a.pixels, b.pixels, fn(px_a, px_b) {
-    let dr = int.absolute_value(px_a.r - px_b.r)
-    let dg = int.absolute_value(px_a.g - px_b.g)
-    let db = int.absolute_value(px_a.b - px_b.b)
-    { dr + dg + db } / 3
-  })
+  let diffs =
+    list.map2(a.pixels, b.pixels, fn(px_a, px_b) {
+      let dr = int.absolute_value(px_a.r - px_b.r)
+      let dg = int.absolute_value(px_a.g - px_b.g)
+      let db = int.absolute_value(px_a.b - px_b.b)
+      { dr + dg + db } / 3
+    })
 
   let total_diff = list.fold(diffs, 0, fn(acc, d) { acc + d })
   let avg_diff = case total {
@@ -270,19 +307,27 @@ pub fn diff_tiles(a: ImageData, b: ImageData) -> String {
     n -> int.to_float(total_diff) /. int.to_float(n)
   }
 
-  let changed_pixels = list.fold(diffs, 0, fn(acc, d) {
-    case d > 10 {
-      True -> acc + 1
-      False -> acc
-    }
-  })
+  let changed_pixels =
+    list.fold(diffs, 0, fn(acc, d) {
+      case d > 10 {
+        True -> acc + 1
+        False -> acc
+      }
+    })
 
   string.concat([
     "Tile Diff:\n",
-    "  Pixels compared: ", int_to_str(total), "\n",
-    "  Average diff: ", float_to_str(avg_diff), "\n",
-    "  Changed pixels: ", int_to_str(changed_pixels),
-    " (", float_to_str(int.to_float(changed_pixels) /. int.to_float(total) *. 100.0), "%)\n",
+    "  Pixels compared: ",
+    int_to_str(total),
+    "\n",
+    "  Average diff: ",
+    float_to_str(avg_diff),
+    "\n",
+    "  Changed pixels: ",
+    int_to_str(changed_pixels),
+    " (",
+    float_to_str(int.to_float(changed_pixels) /. int.to_float(total) *. 100.0),
+    "%)\n",
   ])
 }
 
@@ -322,11 +367,17 @@ fn do_list_at(l: List(a), index: Int) -> Result(a, Nil) {
   }
 }
 
-@external(erlang, "erlang", "integer_to_binary")
-fn int_to_str(n: Int) -> String
+// Replaced externals with pure Gleam
+fn int_to_str(n: Int) -> String {
+  int.to_string(n)
+}
 
-@external(erlang, "erlang", "binary_to_integer")
-fn str_to_int(s: String) -> Int
+fn str_to_int(s: String) -> Int {
+  case int.parse(s) {
+    Ok(n) -> n
+    Error(_) -> 0
+  }
+}
 
 fn float_to_str(f: Float) -> String {
   let int_part = float.truncate(f)
