@@ -24,7 +24,10 @@ pub type Config {
     input_dir: String,
     dataset_path: String,
 
-    // API
+    // API & Cloud
+    generation_mode: GenerationMode,
+    nvidia_api_key: Option(String),
+    hf_token: Option(String),
     api_endpoint: Option(String),
     hf_space: Option(String),
 
@@ -32,6 +35,12 @@ pub type Config {
     batch_size: Int,
     max_concurrent: Int,
   )
+}
+
+pub type GenerationMode {
+  Local    // RTX 4090 (ai_server.py)
+  Nvidia   // NVIDIA NIM API (Cloud)
+  HuggingFace // HF Inference API (Cloud)
 }
 
 /// Configuração padrão para Capão Bonito (centro expandido)
@@ -42,12 +51,12 @@ pub fn default() -> Config {
     grid_height: 25,
     tile_size: 512,
 
-    // Modelo Qwen-Image-Edit-2511
-    model_id: "Qwen/Qwen-Image-Edit-2511",
-    prompt_template: "Convert to isometric pixel art, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view",
-    negative_prompt: "blurry, smooth gradients, realistic, antialiased, modern, high resolution, 3d render",
+    // Modelo
+    model_id: "stabilityai/stable-diffusion-3.5-large", // NVIDIA Default
+    prompt_template: "isometric pixel art, simcity 2000 style, 16-bit graphics, orthographic view",
+    negative_prompt: "blurry, smooth gradients, realistic, antialiased, 3d render, perspective, vanishing point",
     num_steps: 28,
-    guidance_scale: 3.5,
+    guidance_scale: 5.0,
     mask_percentage: 0.25,
 
     // Paths
@@ -55,13 +64,40 @@ pub fn default() -> Config {
     input_dir: "tiles/input",
     dataset_path: "dataset/training_data.csv",
 
-    // API
+    // API & Cloud
+    generation_mode: Local, // Default to 4090
+    nvidia_api_key: None, // Set via ISOGLEAM_NVIDIA_KEY
+    hf_token: None,       // Set via ISOGLEAM_HF_TOKEN
     api_endpoint: None,
     hf_space: Some("mrootx/gleam-city"),
 
     // Performance
     batch_size: 1,
     max_concurrent: 4,
+  )
+}
+
+import gleam/erlang/os
+
+/// Carrega configuração do ambiente
+pub fn from_env() -> Config {
+  let base = default()
+  
+  // Detecta chaves para habilitar modo Cloud automaticamente
+  let nvidia_key = os.get_env("ISOGLEAM_NVIDIA_KEY")
+  let hf_token = os.get_env("ISOGLEAM_HF_TOKEN")
+  
+  let mode = case nvidia_key, hf_token {
+    Ok(_), _ -> Nvidia
+    _, Ok(_) -> HuggingFace
+    _, _ -> Local
+  }
+
+  Config(
+    ..base,
+    generation_mode: mode,
+    nvidia_api_key: option.from_result(nvidia_key),
+    hf_token: option.from_result(hf_token),
   )
 }
 

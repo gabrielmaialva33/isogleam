@@ -8,6 +8,7 @@ import gleam/list
 import gleam/option.{type Option}
 import gleam/result
 import gleam/string
+import isogleam/core/config.{type Config, type GenerationMode, HuggingFace, Local, Nvidia}
 import isogleam/ffi/http
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -15,7 +16,14 @@ import isogleam/ffi/http
 // ────────────────────────────────────────────────────────────────────────────
 
 pub type NimConfig {
-  NimConfig(host: String, port: Int, model: String, timeout_ms: Int)
+  NimConfig(
+    host: String, 
+    port: Int, 
+    model: String, 
+    timeout_ms: Int,
+    mode: GenerationMode,
+    api_key: Option(String)
+  )
 }
 
 pub type ClipEmbedding {
@@ -30,6 +38,22 @@ pub type Classification {
 // Public API
 // ────────────────────────────────────────────────────────────────────────────
 
+/// Create config from core config
+pub fn from_core(core: Config) -> NimConfig {
+  NimConfig(
+    host: "localhost", // Ignored for Cloud
+    port: 8000,        // Ignored for Cloud
+    model: core.model_id,
+    timeout_ms: 60_000,
+    mode: core.generation_mode,
+    api_key: case core.generation_mode {
+      Nvidia -> core.nvidia_api_key
+      HuggingFace -> core.hf_token
+      Local -> None
+    }
+  )
+}
+
 /// Create default configuration pointing to local AI Brain
 pub fn default_config() -> NimConfig {
   NimConfig(
@@ -37,6 +61,8 @@ pub fn default_config() -> NimConfig {
     port: 8000,
     model: "sd-v1.5-controlnet-isometric",
     timeout_ms: 60_000,
+    mode: Local,
+    api_key: None,
   )
 }
 
@@ -57,12 +83,11 @@ pub fn generate_tile(
   seed: Int,
   config: NimConfig,
 ) -> Result(String, String) {
-  let url = base_url(config) <> "/generate"
-
-  let body_json = build_generate_request(prompt, control_image_b64, seed)
+  let #(url, headers) = resolve_endpoint(config, "/generate")
+  let body_json = build_generate_request(prompt, control_image_b64, seed, config.mode)
   let body_str = json.to_string(body_json)
 
-  http.post_json(url, body_str)
+  http.post_json_with_headers(url, body_str, headers)
   |> convert_http_error
   |> validate_response
   |> extract_image_field
@@ -73,12 +98,12 @@ pub fn clip_embed(
   image_b64: String,
   config: NimConfig,
 ) -> Result(ClipEmbedding, String) {
-  let url = base_url(config) <> "/clip/embed"
+  let #(url, headers) = resolve_endpoint(config, "/clip/embed")
 
   let body_json = json.object([#("image_b64", json.string(image_b64))])
   let body_str = json.to_string(body_json)
 
-  http.post_json(url, body_str)
+  http.post_json_with_headers(url, body_str, headers)
   |> convert_http_error
   |> validate_response
   |> extract_embedding_field
@@ -90,12 +115,12 @@ pub fn clip_classify(
   labels: List(String),
   config: NimConfig,
 ) -> Result(List(Classification), String) {
-  let url = base_url(config) <> "/clip/classify"
+  let #(url, headers) = resolve_endpoint(config, "/clip/classify")
 
   let body_json = build_classify_request(image_b64, labels)
   let body_str = json.to_string(body_json)
 
-  http.post_json(url, body_str)
+  http.post_json_with_headers(url, body_str, headers)
   |> convert_http_error
   |> validate_response
   |> extract_classifications
@@ -111,7 +136,29 @@ pub fn health_check(config: NimConfig) -> Bool {
 // Internal Helpers
 // ────────────────────────────────────────────────────────────────────────────
 
+fn resolve_endpoint(config: NimConfig, path: String) -> #(String, List(#(String, String))) {
+  case config.mode {
+    Local -> {
+      let url = "http://" <> config.host <> ":" <> int.to_string(config.port) <> path
+      #(url, [])
+    }
+    Nvidia -> {
+      // NVIDIA NIM Endpoint for SD 3.5
+      let url = "https://ai.api.nvidia.com/v1/genai/stabilityai/stable-diffusion-3-5-large"
+      let key = option.unwrap(config.api_key, "")
+      #(url, [#("Authorization", "Bearer " <> key)])
+    }
+    HuggingFace -> {
+      // HF Inference API
+      let url = "https://api-inference.huggingface.co/models/" <> config.model
+      let key = option.unwrap(config.api_key, "")
+      #(url, [#("Authorization", "Bearer " <> key)])
+    }
+  }
+}
+
 fn base_url(config: NimConfig) -> String {
+  // Legacy helper, kept for compatibility if needed, but resolve_endpoint is preferred
   "http://" <> config.host <> ":" <> int.to_string(config.port)
 }
 
@@ -143,18 +190,45 @@ fn build_generate_request(
   prompt: String,
   control_image_b64: Option(String),
   seed: Int,
+  mode: GenerationMode,
 ) -> json.Json {
-  json.object([
-    #("prompt", json.string(prompt)),
-    #("width", json.int(512)),
-    #("height", json.int(512)),
-    #("steps", json.int(25)),
-    #("seed", json.int(seed)),
-    #("control_image_b64", case control_image_b64 {
-      option.Some(img) -> json.string(img)
-      option.None -> json.null()
-    }),
-  ])
+  case mode {
+    Local -> 
+      json.object([
+        #("prompt", json.string(prompt)),
+        #("width", json.int(512)),
+        #("height", json.int(512)),
+        #("steps", json.int(25)),
+        #("seed", json.int(seed)),
+        #("control_image_b64", case control_image_b64 {
+          option.Some(img) -> json.string(img)
+          option.None -> json.null()
+        }),
+      ])
+    
+    Nvidia ->
+      // NVIDIA Payload format (Standard GenAI)
+      json.object([
+        #("text_prompts", json.preprocessed_array([
+          json.object([#("text", json.string(prompt)), #("weight", json.float(1.0))])
+        ])),
+        #("cfg_scale", json.float(5.0)),
+        #("seed", json.int(seed)),
+        #("sampler", json.string("K_EULER_ANCESTRAL")),
+        #("steps", json.int(25))
+      ])
+
+    HuggingFace ->
+      // HF Inference Payload
+      json.object([
+        #("inputs", json.string(prompt)),
+        #("parameters", json.object([
+           #("negative_prompt", json.string("blurry, low quality")),
+           #("num_inference_steps", json.int(25)),
+           #("guidance_scale", json.float(7.5))
+        ]))
+      ])
+  }
 }
 
 fn build_classify_request(image_b64: String, labels: List(String)) -> json.Json {
@@ -206,11 +280,12 @@ fn extract_classifications(
 ) -> Result(List(Classification), String) {
   case result {
     Ok(body) -> {
-      let decoder = decode.list({
-        use label <- decode.field("label", decode.string)
-        use confidence <- decode.field("score", decode.float)
-        decode.success(Classification(label: label, confidence: confidence))
-      })
+      let decoder =
+        decode.list({
+          use label <- decode.field("label", decode.string)
+          use confidence <- decode.field("confidence", decode.float)
+          decode.success(Classification(label: label, confidence: confidence))
+        })
 
       json.parse(body, decoder)
       |> result.map_error(format_json_error)
@@ -224,5 +299,17 @@ fn format_json_error(err: json.DecodeError) -> String {
     json.UnexpectedEndOfInput -> "Unexpected end of input"
     json.UnexpectedByte(byte) -> "Unexpected byte: " <> byte
     json.UnexpectedSequence(bytes) -> "Unexpected sequence: " <> bytes
+    json.UnableToDecode(errors) -> {
+      let error_msgs =
+        list.map(errors, fn(err) {
+          "Field '"
+          <> string.join(err.path, ".")
+          <> "': Expected "
+          <> err.expected
+          <> ", found "
+          <> err.found
+        })
+      "Decode failed: " <> string.join(error_msgs, "; ")
+    }
   }
 }
