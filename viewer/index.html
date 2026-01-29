@@ -150,19 +150,16 @@
         const viewer = OpenSeadragon({
             id: 'viewer',
             prefixUrl: 'https://cdn.jsdelivr.net/npm/openseadragon@4.1/build/openseadragon/images/',
-            // Demo: using placeholder until real tiles are generated
-            tileSources: {
-                type: 'legacy-image-pyramid',
-                levels: [
-                    { url: 'placeholder.png', width: 512, height: 512 }
-                ]
-            },
+            tileSources: 'tiles/capao_bonito.dzi',
             showNavigator: true,
             navigatorPosition: 'BOTTOM_LEFT',
-            minZoomLevel: 0.5,
-            maxZoomLevel: 10,
+            minZoomLevel: 0.3,
+            maxZoomLevel: 20,
             visibilityRatio: 0.5,
             constrainDuringPan: true,
+            animationTime: 0.3,
+            zoomPerScroll: 1.3,
+            defaultZoomLevel: 1,
         });
 
         // Hide loading when ready
@@ -215,20 +212,40 @@
             // TODO: Implement grid overlay
         });
 
-        // For demo: show message if no tiles
-        setTimeout(() => {
-            if (document.getElementById('loading').style.display !== 'none') {
-                document.getElementById('loading').innerHTML = `
-                    <p style="color: #e94560; font-size: 1.2em;">Sem tiles ainda</p>
-                    <p style="margin-top: 10px; color: #7f8c8d;">
-                        Execute o pipeline para gerar tiles de Capão Bonito
-                    </p>
-                    <code style="display: block; margin-top: 15px; background: #0f0f23; padding: 10px; border-radius: 6px;">
-                        gleam run -- generate --region "capao_bonito"
-                    </code>
-                `;
-            }
-        }, 3000);
+        // Grid config (from generation)
+        const GRID_CONFIG = {
+            tileSize: 480,  // 512 - 32 blend
+            gridSize: 7,
+            centerTile: { x: 26, y: 23 },
+            minTile: { x: 23, y: 20 },
+            imageSize: 3392
+        };
+
+        // Calculate tile from click position
+        function getTileFromPoint(viewportPoint) {
+            const pixelX = viewportPoint.x * GRID_CONFIG.imageSize;
+            const pixelY = viewportPoint.y * GRID_CONFIG.imageSize;
+            const tileX = GRID_CONFIG.minTile.x + Math.floor(pixelX / GRID_CONFIG.tileSize);
+            const tileY = GRID_CONFIG.minTile.y + (GRID_CONFIG.gridSize - 1 - Math.floor(pixelY / GRID_CONFIG.tileSize));
+            return { x: tileX, y: tileY };
+        }
+
+        // Update click handler with real tile info
+        viewer.removeAllHandlers('canvas-click');
+        viewer.addHandler('canvas-click', (event) => {
+            const webPoint = event.position;
+            const viewportPoint = viewer.viewport.pointFromPixel(webPoint);
+            const tile = getTileFromPoint(viewportPoint);
+
+            const panel = document.getElementById('info-panel');
+            panel.style.display = 'block';
+            document.getElementById('tile-coord').textContent = `tile_${tile.x.toString().padStart(2,'0')}_${tile.y.toString().padStart(2,'0')}`;
+            document.getElementById('tile-type').textContent = 'Urban Center';
+            document.getElementById('tile-score').textContent = '✓ Gerado';
+            document.getElementById('tile-date').textContent = new Date().toLocaleDateString('pt-BR');
+        });
+
+        console.log('IsoGleam Viewer carregado - 3392x3392 px, 49 tiles');
     </script>
 </body>
 </html>
