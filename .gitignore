@@ -8,3 +8,4 @@ output/
 viewer/tiles/
 cache/
 .gemini/
+.env
