@@ -10,6 +10,19 @@ from PIL import Image
 import numpy as np
 import uvicorn
 
+# Diffusers imports (at top to avoid xformers conflicts)
+# We'll catch ImportError if xformers is broken
+try:
+    from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, UniPCMultistepScheduler
+    from transformers import CLIPModel, CLIPProcessor
+    import cv2
+    DIFFUSERS_AVAILABLE = True
+except ImportError as e:
+    logger_temp = logging.getLogger("isogleam-brain")
+    logger_temp.error(f"Failed to import diffusers/transformers: {e}")
+    logger_temp.error("AI features will be disabled. Install with: pip install diffusers transformers")
+    DIFFUSERS_AVAILABLE = False
+
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("isogleam-brain")
@@ -84,33 +97,53 @@ def encode_image(image: Image.Image) -> str:
 def get_pipeline():
     if MODELS["pipeline"] is None:
         logger.info("Loading Stable Diffusion Pipeline...")
-        from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, UniPCMultistepScheduler
+
+        if not DIFFUSERS_AVAILABLE:
+            raise HTTPException(status_code=500, detail="Diffusers not available. Check server logs.")
 
         # Use a high-quality isometric suitable model
         # For simplicity and speed/quality balance on a 4090, using a solid 1.5 base or dreamshaper typically works very well for game assets
         model_id = "runwayml/stable-diffusion-v1-5"
-        controlnet_id = "lllyasviel/control_v11p_sd15_canny"
 
-        controlnet = ControlNetModel.from_pretrained(controlnet_id, torch_dtype=torch.float16)
-        pipe = StableDiffusionControlNetPipeline.from_pretrained(
-            model_id, controlnet=controlnet, torch_dtype=torch.float16, safety_checker=None
-        )
-        pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
+    # Load ControlNet and Pipeline
+    logger.info("Loading ControlNet Canny...")
+    controlnet = ControlNetModel.from_pretrained(
+        "lllyasviel/sd-controlnet-canny",
+        torch_dtype=torch.float16,
+    ).to(DEVICE)
 
-        # Enable optimizations for 4090
-        pipe.enable_xformers_memory_efficient_attention()
-        pipe.enable_model_cpu_offload() # Saves VRAM, though 4090 has plenty (24GB). modify if needed.
-        # If pure speed is needed and 24GB is dedicated:
-        # pipe.to(DEVICE)
+    logger.info("Loading Stable Diffusion Pipeline...")
+    _pipeline = StableDiffusionControlNetPipeline.from_pretrained(
+        "runwayml/stable-diffusion-v1-5",
+        controlnet=controlnet,
+        torch_dtype=torch.float16,
+        safety_checker=None,
+    ).to(DEVICE)
 
-        MODELS["pipeline"] = pipe
-        logger.info("Stable Diffusion Loaded.")
+    # Try to enable xformers (optional optimization)
+    try:
+        _pipeline.enable_xformers_memory_efficient_attention()
+        logger.info("✅ xformers enabled")
+    except Exception as e:
+        logger.warning(f"⚠️  xformers not available: {e}")
+        logger.info("Continuing without xformers (slightly slower)")
+
+    # CPU offload for memory efficiency
+    _pipeline.enable_model_cpu_offload()
+    logger.info("Pipeline loaded successfully!")
+
+    # Set the scheduler
+    _pipeline.scheduler = UniPCMultistepScheduler.from_config(_pipeline.scheduler.config)
+
+    MODELS["pipeline"] = _pipeline
     return MODELS["pipeline"]
 
 def get_clip():
     if MODELS["clip_model"] is None:
         logger.info("Loading CLIP Model...")
-        from transformers import CLIPProcessor, CLIPModel
+
+        if not DIFFUSERS_AVAILABLE:
+            raise HTTPException(status_code=500, detail="Transformers not available. Check server logs.")
 
         model_id = "openai/clip-vit-large-patch14"
         MODELS["clip_model"] = CLIPModel.from_pretrained(model_id).to(DEVICE)

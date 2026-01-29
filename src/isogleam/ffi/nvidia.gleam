@@ -1,10 +1,13 @@
 /// IsoGleam FFI - AI Brain Client
 /// Connects to the local Python AI Server (running on NVIDIA 4090)
 /// Professional implementation using idiomatic Gleam patterns.
+import gleam/dynamic/decode
 import gleam/int
 import gleam/json
 import gleam/list
 import gleam/option.{type Option}
+import gleam/result
+import gleam/string
 import isogleam/ffi/http
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -162,30 +165,19 @@ fn build_classify_request(image_b64: String, labels: List(String)) -> json.Json 
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// Field Extractors (Placeholder - needs proper JSON parsing library)
-// ────────────────────────────────────────────────────────────────────────────
-//
-// NOTE: Gleam's standard `gleam/json` only provides encoding, not decoding.
-// For production, we need to either:
-// 1. Add `gleam_jsone` package for JSON parsing
-// 2. Implement Erlang FFI for `jiffy` or `jason`
-// 3. Use `gleam_json` with dynamic decoders
-//
-// For now, returning placeholders to keep compile working while we wait
-// for proper JSON library integration.
+// Field Extractors & Decoders
 // ────────────────────────────────────────────────────────────────────────────
 
 fn extract_image_field(result: Result(String, String)) -> Result(String, String) {
-  // TODO: Parse JSON response and extract "image_b64" field
-  // Example with gleam_jsone:
-  //   use json <- result.try(jsone.decode(body))
-  //   use image <- result.try(dynamic.field("image_b64", dynamic.string)(json))
-  //   Ok(image)
-
   case result {
-    Ok(_body) -> {
-      // Placeholder: In production, parse JSON here
-      Error("JSON parsing not yet implemented - need gleam_jsone or similar")
+    Ok(body) -> {
+      let decoder = {
+        use image <- decode.field("image_b64", decode.string)
+        decode.success(image)
+      }
+
+      json.parse(body, decoder)
+      |> result.map_error(format_json_error)
     }
     Error(err) -> Error(err)
   }
@@ -195,9 +187,15 @@ fn extract_embedding_field(
   result: Result(String, String),
 ) -> Result(ClipEmbedding, String) {
   case result {
-    Ok(_body) -> {
-      // Placeholder
-      Error("JSON parsing not yet implemented")
+    Ok(body) -> {
+      let decoder = {
+        use vector <- decode.field("embedding", decode.list(decode.float))
+        use dimensions <- decode.field("dimensions", decode.int)
+        decode.success(ClipEmbedding(vector: vector, dimensions: dimensions))
+      }
+
+      json.parse(body, decoder)
+      |> result.map_error(format_json_error)
     }
     Error(err) -> Error(err)
   }
@@ -207,10 +205,24 @@ fn extract_classifications(
   result: Result(String, String),
 ) -> Result(List(Classification), String) {
   case result {
-    Ok(_body) -> {
-      // Placeholder: Return mock classification for now
-      Ok([Classification(label: "building", confidence: 0.95)])
+    Ok(body) -> {
+      let decoder = decode.list({
+        use label <- decode.field("label", decode.string)
+        use confidence <- decode.field("score", decode.float)
+        decode.success(Classification(label: label, confidence: confidence))
+      })
+
+      json.parse(body, decoder)
+      |> result.map_error(format_json_error)
     }
     Error(err) -> Error(err)
+  }
+}
+
+fn format_json_error(err: json.DecodeError) -> String {
+  case err {
+    json.UnexpectedEndOfInput -> "Unexpected end of input"
+    json.UnexpectedByte(byte) -> "Unexpected byte: " <> byte
+    json.UnexpectedSequence(bytes) -> "Unexpected sequence: " <> bytes
   }
 }
