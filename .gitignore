@@ -9,3 +9,8 @@ viewer/tiles/
 cache/
 .gemini/
 .env
+**/_gleam_artefacts/
+*.cache
+*.cache_meta
+*.cache_inline
+*.cache_warnings
