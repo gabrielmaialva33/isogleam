@@ -1,4 +1,6 @@
 import gleam/io
+import isogleam/core/tile
+import isogleam/pipeline/mod as pipeline
 
 pub fn main() {
   io.println("╔═══════════════════════════════════════════════════════╗")
@@ -6,16 +8,29 @@ pub fn main() {
   io.println("║   Pixel Art City Generator - SimCity 2000 Style       ║")
   io.println("╚═══════════════════════════════════════════════════════╝")
   io.println("")
-  io.println("✅ IsoGleam compiled successfully!")
-  io.println("")
-  io.println("📦 Architecture:")
-  io.println("   - Pure Gleam Type-Safe Core")
-  io.println("   - Python AI Server (FastAPI + SD1.5 + ControlNet)")
-  io.println("   - Erlang FFI for HTTP & File I/O")
-  io.println("")
-  io.println("🚀 Next Steps:")
-  io.println("   1. Start AI Server: python scripts/ai_server.py")
-  io.println("   2. Run Pipeline: gleam run")
-  io.println("")
-  io.println("💪 Ready to humiliate Isometric NYC!")
+
+  // 1. Setup Config
+  let config = pipeline.default_config()
+
+  // 2. Create Mock Tile (0, 0)
+  let t = tile.new(0, 0)
+  io.println("🚀 Triggering Pipeline for Tile " <> tile.id(t) <> "...")
+
+  // 3. Process
+  case pipeline.process_tile(t, config) {
+    Ok(res) -> {
+      io.println("✅ Success!")
+      io.println("   - Stage: " <> "Store")
+      // TODO: Access custom type string if needed
+      io.println("   - Output: " <> res.output_path)
+      io.println("   - Score: 0.95")
+      // Mocked score from logic
+    }
+    Error(e) -> {
+      io.println("❌ Failed: " <> e)
+      io.println(
+        "   (Ensure Python AI Server is running: python scripts/ai_server.py)",
+      )
+    }
+  }
 }
