@@ -1,0 +1,233 @@
+[
+  {
+    "id": "tile_23_20",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, paved roads with sidewalks, school",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 23,
+    "y": 20
+  },
+  {
+    "id": "tile_23_21",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks, social facility",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 23,
+    "y": 21
+  },
+  {
+    "id": "tile_23_22",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 23,
+    "y": 22
+  },
+  {
+    "id": "tile_23_23",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks, parking",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 23,
+    "y": 23
+  },
+  {
+    "id": "tile_23_26",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 23,
+    "y": 26
+  },
+  {
+    "id": "tile_24_20",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks, clinic",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 24,
+    "y": 20
+  },
+  {
+    "id": "tile_24_21",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks, clinic, social facility",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 24,
+    "y": 21
+  },
+  {
+    "id": "tile_24_23",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks, hospital, school",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 24,
+    "y": 23
+  },
+  {
+    "id": "tile_24_24",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks, school",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 24,
+    "y": 24
+  },
+  {
+    "id": "tile_25_20",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks, clinic",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 25,
+    "y": 20
+  },
+  {
+    "id": "tile_25_23",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks, hospital, school",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 25,
+    "y": 23
+  },
+  {
+    "id": "tile_25_24",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks, school",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 25,
+    "y": 24
+  },
+  {
+    "id": "tile_25_25",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 25,
+    "y": 25
+  },
+  {
+    "id": "tile_25_26",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks, school",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 25,
+    "y": 26
+  },
+  {
+    "id": "tile_26_20",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, paved roads with sidewalks",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 26,
+    "y": 20
+  },
+  {
+    "id": "tile_26_21",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 26,
+    "y": 21
+  },
+  {
+    "id": "tile_26_22",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 26,
+    "y": 22
+  },
+  {
+    "id": "tile_26_23",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 26,
+    "y": 23
+  },
+  {
+    "id": "tile_26_25",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks, bar",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 26,
+    "y": 25
+  },
+  {
+    "id": "tile_26_26",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 26,
+    "y": 26
+  },
+  {
+    "id": "tile_27_21",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, paved roads with sidewalks, school",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 27,
+    "y": 21
+  },
+  {
+    "id": "tile_27_22",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 27,
+    "y": 22
+  },
+  {
+    "id": "tile_27_23",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 27,
+    "y": 23
+  },
+  {
+    "id": "tile_27_25",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 27,
+    "y": 25
+  },
+  {
+    "id": "tile_27_26",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 27,
+    "y": 26
+  },
+  {
+    "id": "tile_28_22",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks, school",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 28,
+    "y": 22
+  },
+  {
+    "id": "tile_28_24",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 28,
+    "y": 24
+  },
+  {
+    "id": "tile_28_25",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, open grass field, trees, empty lot",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 28,
+    "y": 25
+  },
+  {
+    "id": "tile_28_26",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, open grass field, trees, empty lot",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 28,
+    "y": 26
+  },
+  {
+    "id": "tile_29_22",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, paved roads with sidewalks, restaurant",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 29,
+    "y": 22
+  },
+  {
+    "id": "tile_29_24",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, open grass field, trees, empty lot",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 29,
+    "y": 24
+  },
+  {
+    "id": "tile_29_25",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 29,
+    "y": 25
+  },
+  {
+    "id": "tile_29_26",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, school",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "x": 29,
+    "y": 26
+  }
+]

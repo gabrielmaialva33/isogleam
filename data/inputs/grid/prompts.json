@@ -1,0 +1,952 @@
+[
+  {
+    "id": "tile_22_24",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, white church with bell tower, stained glass windows, small garden, motorcycle parking, pharmacy",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 73,
+    "classification": "urban_center",
+    "buildings": 14,
+    "amenities": 5,
+    "bounds_wgs84": [
+      -48.349967973187375,
+      -24.00643728915155,
+      -48.34896306704041,
+      -24.005557080714073
+    ],
+    "center_wgs84": [
+      -48.349465520113895,
+      -24.00599718493281
+    ]
+  },
+  {
+    "id": "tile_21_24",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, commercial shops with storefronts, awnings, display windows, language school, school building with playground, flagpole, yellow school bus, school with students",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 54,
+    "classification": "urban_center",
+    "buildings": 9,
+    "amenities": 4,
+    "bounds_wgs84": [
+      -48.350949510646245,
+      -24.00641581293687,
+      -48.349944598833645,
+      -24.00553561167168
+    ],
+    "center_wgs84": [
+      -48.350447054739945,
+      -24.005975712304274
+    ]
+  },
+  {
+    "id": "tile_23_25",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, dentist, bank building with classical columns, ATM, security cameras, parking lot, bank with security",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 52,
+    "classification": "urban_center",
+    "buildings": 10,
+    "amenities": 4,
+    "bounds_wgs84": [
+      -48.34896306704041,
+      -24.005557080714073,
+      -48.34795817452803,
+      -24.00467686407163
+    ],
+    "center_wgs84": [
+      -48.34846062078422,
+      -24.00511697239285
+    ]
+  },
+  {
+    "id": "tile_22_23",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, white church with bell tower, stained glass windows, small garden, driving school, restaurant building with outdoor seating, neon signs, school with students",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 51,
+    "classification": "urban_center",
+    "buildings": 5,
+    "amenities": 6,
+    "bounds_wgs84": [
+      -48.349991348692896,
+      -24.007338966503955,
+      -48.348986434576695,
+      -24.006458759099708
+    ],
+    "center_wgs84": [
+      -48.34948889163479,
+      -24.006898862801833
+    ]
+  },
+  {
+    "id": "tile_24_22",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, community centre, hospital building with red cross, ambulance bay, emergency entrance, school building with playground, flagpole, yellow school bus, large hospital complex",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 45,
+    "classification": "urban_center",
+    "buildings": 5,
+    "amenities": 5,
+    "bounds_wgs84": [
+      -48.34805161970559,
+      -24.008283580981267,
+      -48.347046708953386,
+      -24.0074033602653
+    ],
+    "center_wgs84": [
+      -48.34754916432949,
+      -24.007843470623285
+    ]
+  },
+  {
+    "id": "tile_22_25",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, pharmacy, parking lot, quiet residential street with sidewalks, trees",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 43,
+    "classification": "urban_center",
+    "buildings": 7,
+    "amenities": 3,
+    "bounds_wgs84": [
+      -48.349944598833645,
+      -24.00553561167168,
+      -48.34893970065555,
+      -24.004655402201006
+    ],
+    "center_wgs84": [
+      -48.3494421497446,
+      -24.005095506936343
+    ]
+  },
+  {
+    "id": "tile_30_22",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, restaurant building with outdoor seating, neon signs, pharmacy, gas station with fuel pumps, convenience store, parked cars",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 42,
+    "classification": "urban_center",
+    "buildings": 2,
+    "amenities": 5,
+    "bounds_wgs84": [
+      -48.342162275153605,
+      -24.00841224232692,
+      -48.341157398411085,
+      -24.007531978581696
+    ],
+    "center_wgs84": [
+      -48.34165983678234,
+      -24.007972110454308
+    ]
+  },
+  {
+    "id": "tile_29_19",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, pharmacy, restaurant building with outdoor seating, neon signs, hospital building with red cross, ambulance bay, emergency entrance",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 39,
+    "classification": "urban_center",
+    "buildings": 5,
+    "amenities": 4,
+    "bounds_wgs84": [
+      -48.343213829140616,
+      -24.011095864352757,
+      -48.342208922824135,
+      -24.010215610872503
+    ],
+    "center_wgs84": [
+      -48.342711375982375,
+      -24.01065573761263
+    ]
+  },
+  {
+    "id": "tile_24_27",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, city hall, parking lot, school building with playground, flagpole, yellow school bus",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 36,
+    "classification": "urban_center",
+    "buildings": 6,
+    "amenities": 3,
+    "bounds_wgs84": [
+      -48.34793481611137,
+      -24.003775184525647,
+      -48.34692994520051,
+      -24.00289495864641
+    ],
+    "center_wgs84": [
+      -48.34743238065594,
+      -24.00333507158603
+    ]
+  },
+  {
+    "id": "tile_25_22",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, hospital building with red cross, ambulance bay, emergency entrance, quiet residential street with sidewalks, trees, large hospital complex",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 36,
+    "classification": "urban_center",
+    "buildings": 6,
+    "amenities": 3,
+    "bounds_wgs84": [
+      -48.3470700651563,
+      -24.00830504020681,
+      -48.346065160071454,
+      -24.007424812318714
+    ],
+    "center_wgs84": [
+      -48.34656761261388,
+      -24.007864926262762
+    ]
+  },
+  {
+    "id": "tile_29_20",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, white church with bell tower, stained glass windows, small garden, school building with playground, flagpole, yellow school bus, place of worship, school with students",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 36,
+    "classification": "urban_center",
+    "buildings": 7,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.34319049676212,
+      -24.01019418117501,
+      -48.342185598414254,
+      -24.009313926663403
+    ],
+    "center_wgs84": [
+      -48.34268804758818,
+      -24.009754053919206
+    ]
+  },
+  {
+    "id": "tile_31_23",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, restaurant building with outdoor seating, neon signs, gas station with fuel pumps, convenience store, parked cars",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 34,
+    "classification": "urban_center",
+    "buildings": 3,
+    "amenities": 4,
+    "bounds_wgs84": [
+      -48.341157398411085,
+      -24.007531978581696,
+      -48.340152535305066,
+      -24.006651706635008
+    ],
+    "center_wgs84": [
+      -48.340654966858075,
+      -24.007091842608354
+    ]
+  },
+  {
+    "id": "tile_23_27",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, city hall, arts centre, hospital building with red cross, ambulance bay, emergency entrance",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 33,
+    "classification": "urban_center",
+    "buildings": 5,
+    "amenities": 3,
+    "bounds_wgs84": [
+      -48.34891633542208,
+      -24.003753723560497,
+      -48.34791145884573,
+      -24.00287350485224
+    ],
+    "center_wgs84": [
+      -48.34841389713391,
+      -24.00331361420637
+    ]
+  },
+  {
+    "id": "tile_24_25",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, dojo, parking lot, quiet residential street with sidewalks, trees",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 33,
+    "classification": "urban_center",
+    "buildings": 7,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.34798153409575,
+      -24.00557854349019,
+      -48.346976647249456,
+      -24.004698319676212
+    ],
+    "center_wgs84": [
+      -48.34747909067261,
+      -24.0051384315832
+    ]
+  },
+  {
+    "id": "tile_27_17",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, pharmacy, gas station with fuel pumps, convenience store, parked cars, main asphalt road with lane markings, traffic lights, busy gas station",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 32,
+    "classification": "urban_center",
+    "buildings": 4,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.34522368269127,
+      -24.012856346701483,
+      -48.34421874909613,
+      -24.01197610962936
+    ],
+    "center_wgs84": [
+      -48.3447212158937,
+      -24.01241622816542
+    ]
+  },
+  {
+    "id": "tile_23_24",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, quiet residential street with sidewalks, trees",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 30,
+    "classification": "residential_dense",
+    "buildings": 9,
+    "amenities": 0,
+    "bounds_wgs84": [
+      -48.348986434576695,
+      -24.006458759099708,
+      -48.34798153409575,
+      -24.00557854349019
+    ],
+    "center_wgs84": [
+      -48.34848398433623,
+      -24.00601865129495
+    ]
+  },
+  {
+    "id": "tile_27_24",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, bank building with classical columns, ATM, security cameras, main asphalt road with lane markings, traffic lights, bank with security",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 27,
+    "classification": "urban_center",
+    "buildings": 5,
+    "amenities": 1,
+    "bounds_wgs84": [
+      -48.34506026862273,
+      -24.006544576226588,
+      -48.34405539080956,
+      -24.005664331931232
+    ],
+    "center_wgs84": [
+      -48.344557829716145,
+      -24.00610445407891
+    ]
+  },
+  {
+    "id": "tile_28_23",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, bar, restaurant building with outdoor seating, neon signs, main asphalt road with lane markings, traffic lights",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 26,
+    "classification": "urban_center",
+    "buildings": 3,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.34410205885643,
+      -24.00746769762481,
+      -48.34309717874368,
+      -24.006587447190153
+    ],
+    "center_wgs84": [
+      -48.343599618800056,
+      -24.00702757240748
+    ]
+  },
+  {
+    "id": "tile_20_28",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, police, prison, quiet residential street with sidewalks, trees",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 25,
+    "classification": "urban_center",
+    "buildings": 4,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.351837501913415,
+      -24.00278762702063,
+      -48.35083261631119,
+      -24.00190742879303
+    ],
+    "center_wgs84": [
+      -48.3513350591123,
+      -24.002347527906828
+    ]
+  },
+  {
+    "id": "tile_24_26",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, parking lot, school building with playground, flagpole, yellow school bus, quiet residential street with sidewalks, trees, school with students",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 25,
+    "classification": "urban_center",
+    "buildings": 4,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.34795817452803,
+      -24.00467686407163,
+      -48.34695329564964,
+      -24.003796639225015
+    ],
+    "center_wgs84": [
+      -48.347455735088836,
+      -24.00423675164832
+    ]
+  },
+  {
+    "id": "tile_31_22",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, gas station with fuel pumps, convenience store, parked cars, pub, main asphalt road with lane markings, traffic lights, busy gas station",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 25,
+    "classification": "urban_center",
+    "buildings": 3,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.34118071370416,
+      -24.008433663949216,
+      -48.340175842631226,
+      -24.007553393033273
+    ],
+    "center_wgs84": [
+      -48.340678278167694,
+      -24.007993528491244
+    ]
+  },
+  {
+    "id": "tile_25_28",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, restaurant building with outdoor seating, neon signs, main asphalt road with lane markings, traffic lights",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 24,
+    "classification": "urban_center",
+    "buildings": 3,
+    "amenities": 1,
+    "bounds_wgs84": [
+      -48.34692994520051,
+      -24.00289495864641,
+      -48.34592508792236,
+      -24.0020147245641
+    ],
+    "center_wgs84": [
+      -48.346427516561434,
+      -24.002454841605257
+    ]
+  },
+  {
+    "id": "tile_26_24",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, gas station with fuel pumps, convenience store, parked cars, quiet residential street with sidewalks, trees, busy gas station",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 24,
+    "classification": "urban_center",
+    "buildings": 3,
+    "amenities": 1,
+    "bounds_wgs84": [
+      -48.346041811837246,
+      -24.006523131344792,
+      -48.34503692835657,
+      -24.005642894220546
+    ],
+    "center_wgs84": [
+      -48.34553937009691,
+      -24.006083012782668
+    ]
+  },
+  {
+    "id": "tile_27_29",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, bus station, main asphalt road with lane markings, traffic lights",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 24,
+    "classification": "urban_center",
+    "buildings": 5,
+    "amenities": 1,
+    "bounds_wgs84": [
+      -48.34494357879241,
+      -24.002036164922494,
+      -48.34393874081237,
+      -24.00115591546819
+    ],
+    "center_wgs84": [
+      -48.344441159802386,
+      -24.00159604019534
+    ]
+  },
+  {
+    "id": "tile_36_42",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, school building with playground, flagpole, yellow school bus, parking lot, quiet residential street with sidewalks, trees",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 24,
+    "classification": "urban_center",
+    "buildings": 4,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.335807483135724,
+      -23.99050685623107,
+      -48.33480279965407,
+      -23.989626528880763
+    ],
+    "center_wgs84": [
+      -48.3353051413949,
+      -23.990066692555917
+    ]
+  },
+  {
+    "id": "tile_45_14",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, school building with playground, flagpole, yellow school bus, place of worship, farmland with crops, fences, barn, school with students",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 24,
+    "classification": "urban_center",
+    "buildings": 4,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.32762453278246,
+      -24.015946487931224,
+      -48.326619677407535,
+      -24.015066124865513
+    ],
+    "center_wgs84": [
+      -48.327122105095,
+      -24.01550630639837
+    ]
+  },
+  {
+    "id": "tile_20_23",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, driving school, quiet residential street with sidewalks, trees, school with students",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 23,
+    "classification": "urban_center",
+    "buildings": 5,
+    "amenities": 1,
+    "bounds_wgs84": [
+      -48.35195443609396,
+      -24.007296005995766,
+      -48.350949510646245,
+      -24.00641581293687
+    ],
+    "center_wgs84": [
+      -48.351451973370104,
+      -24.006855909466317
+    ]
+  },
+  {
+    "id": "tile_21_25",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, restaurant building with outdoor seating, neon signs, pharmacy, quiet residential street with sidewalks, trees",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 23,
+    "classification": "urban_center",
+    "buildings": 3,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.35092612947511,
+      -24.005514136363022,
+      -48.349921225631675,
+      -24.004633934064355
+    ],
+    "center_wgs84": [
+      -48.350423677553394,
+      -24.00507403521369
+    ]
+  },
+  {
+    "id": "tile_28_20",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, school building with playground, flagpole, yellow school bus, quiet residential street with sidewalks, trees, school with students",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 23,
+    "classification": "urban_center",
+    "buildings": 4,
+    "amenities": 1,
+    "bounds_wgs84": [
+      -48.3441720695505,
+      -24.010172745209744,
+      -48.34316716553321,
+      -24.009292497869872
+    ],
+    "center_wgs84": [
+      -48.343669617541856,
+      -24.009732621539808
+    ]
+  },
+  {
+    "id": "tile_28_21",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, school building with playground, flagpole, yellow school bus, quiet residential street with sidewalks, trees, school with students",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 23,
+    "classification": "urban_center",
+    "buildings": 5,
+    "amenities": 1,
+    "bounds_wgs84": [
+      -48.3441487315026,
+      -24.00927106280883,
+      -48.34314383545385,
+      -24.008390814437345
+    ],
+    "center_wgs84": [
+      -48.34364628347822,
+      -24.008830938623085
+    ]
+  },
+  {
+    "id": "tile_33_22",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, white church with bell tower, stained glass windows, small garden, residential houses with red tile roofs, small front yards, community centre, place of worship",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 23,
+    "classification": "urban_center",
+    "buildings": 2,
+    "amenities": 3,
+    "bounds_wgs84": [
+      -48.339217587359066,
+      -24.008476488391853,
+      -48.338212727626406,
+      -24.007596203135172
+    ],
+    "center_wgs84": [
+      -48.338715157492736,
+      -24.008036345763514
+    ]
+  },
+  {
+    "id": "tile_20_29",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, place of worship, quiet residential street with sidewalks, trees",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 22,
+    "classification": "urban_center",
+    "buildings": 3,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.35181411853443,
+      -24.001885950843192,
+      -48.35080924090019,
+      -24.001005751581896
+    ],
+    "center_wgs84": [
+      -48.35131167971731,
+      -24.001445851212544
+    ]
+  },
+  {
+    "id": "tile_25_21",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, hospital building with red cross, ambulance bay, emergency entrance",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 22,
+    "classification": "urban_center",
+    "buildings": 4,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.347093422510085,
+      -24.0092067200209,
+      -48.34608850945615,
+      -24.00832649316522
+    ],
+    "center_wgs84": [
+      -48.34659096598312,
+      -24.00876660659306
+    ]
+  },
+  {
+    "id": "tile_26_16",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, bar, gas station with fuel pumps, convenience store, parked cars, main asphalt road with lane markings, traffic lights, busy gas station",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 22,
+    "classification": "urban_center",
+    "buildings": 3,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.34622862992665,
+      -24.013736575568334,
+      -48.34522368269127,
+      -24.012856346701483
+    ],
+    "center_wgs84": [
+      -48.345726156308956,
+      -24.013296461134907
+    ]
+  },
+  {
+    "id": "tile_26_29",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, taxi, bus station, main asphalt road with lane markings, traffic lights",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 22,
+    "classification": "urban_center",
+    "buildings": 3,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.34592508792236,
+      -24.0020147245641,
+      -48.34492024427632,
+      -24.001134482279525
+    ],
+    "center_wgs84": [
+      -48.34542266609934,
+      -24.001574603421812
+    ]
+  },
+  {
+    "id": "tile_29_23",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, gas station with fuel pumps, convenience store, parked cars, main asphalt road with lane markings, traffic lights, busy gas station",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 22,
+    "classification": "urban_center",
+    "buildings": 3,
+    "amenities": 1,
+    "bounds_wgs84": [
+      -48.34312050652402,
+      -24.007489130877435,
+      -48.34211563207981,
+      -24.006608873271865
+    ],
+    "center_wgs84": [
+      -48.34261806930192,
+      -24.007049002074652
+    ]
+  },
+  {
+    "id": "tile_39_08",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, quiet residential street with sidewalks, trees",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 22,
+    "classification": "residential",
+    "buildings": 7,
+    "amenities": 0,
+    "bounds_wgs84": [
+      -48.333653951566816,
+      -24.021228494161473,
+      -48.332649014321795,
+      -24.020348180289503
+    ],
+    "center_wgs84": [
+      -48.3331514829443,
+      -24.02078833722549
+    ]
+  },
+  {
+    "id": "tile_26_28",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, restaurant building with outdoor seating, neon signs, bus station, main asphalt road with lane markings, traffic lights",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 21,
+    "classification": "urban_center",
+    "buildings": 1,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.34594843040463,
+      -24.002916406175036,
+      -48.34494357879241,
+      -24.002036164922494
+    ],
+    "center_wgs84": [
+      -48.34544600459852,
+      -24.002476285548767
+    ]
+  },
+  {
+    "id": "tile_31_26",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, empty lot with grass patches, dirt",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 21,
+    "classification": "rural",
+    "buildings": 7,
+    "amenities": 0,
+    "bounds_wgs84": [
+      -48.341087459424614,
+      -24.004826921715033,
+      -48.3400826202171,
+      -24.00394664667619
+    ],
+    "center_wgs84": [
+      -48.34058503982086,
+      -24.00438678419561
+    ]
+  },
+  {
+    "id": "tile_23_31",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, school building with playground, flagpole, yellow school bus, fire station, quiet residential street with sidewalks, trees, school with students",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 20,
+    "classification": "urban_center",
+    "buildings": 3,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.348822886001415,
+      -24.000147007724145,
+      -48.34781804129267,
+      -23.999266784884473
+    ],
+    "center_wgs84": [
+      -48.34832046364704,
+      -23.99970689630431
+    ]
+  },
+  {
+    "id": "tile_24_14",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, restaurant building with outdoor seating, neon signs, main asphalt road with lane markings, traffic lights",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 20,
+    "classification": "urban_center",
+    "buildings": 2,
+    "amenities": 1,
+    "bounds_wgs84": [
+      -48.3482385653205,
+      -24.015497008683006,
+      -48.34723359080286,
+      -24.014616796229117
+    ],
+    "center_wgs84": [
+      -48.34773607806168,
+      -24.01505690245606
+    ]
+  },
+  {
+    "id": "tile_25_40",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, restaurant building with outdoor seating, neon signs, ice cream, main asphalt road with lane markings, traffic lights",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 20,
+    "classification": "urban_center",
+    "buildings": 2,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.34664982955149,
+      -23.992074781766703,
+      -48.345645067846725,
+      -23.991194535297755
+    ],
+    "center_wgs84": [
+      -48.34614744869911,
+      -23.991634658532227
+    ]
+  },
+  {
+    "id": "tile_27_20",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, veterinary, school building with playground, flagpole, yellow school bus, quiet residential street with sidewalks, trees, school with students",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 20,
+    "classification": "urban_center",
+    "buildings": 1,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.345153641188965,
+      -24.01015130297672,
+      -48.3441487315026,
+      -24.00927106280883
+    ],
+    "center_wgs84": [
+      -48.344651186345786,
+      -24.009711182892772
+    ]
+  },
+  {
+    "id": "tile_29_21",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, school building with playground, flagpole, yellow school bus, quiet residential street with sidewalks, trees, school with students",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 20,
+    "classification": "urban_center",
+    "buildings": 4,
+    "amenities": 1,
+    "bounds_wgs84": [
+      -48.34316716553321,
+      -24.009292497869872,
+      -48.342162275153605,
+      -24.00841224232692
+    ],
+    "center_wgs84": [
+      -48.34266472034341,
+      -24.008852370098396
+    ]
+  },
+  {
+    "id": "tile_30_21",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, bar, gas station with fuel pumps, convenience store, parked cars, main asphalt road with lane markings, traffic lights, busy gas station",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 20,
+    "classification": "urban_center",
+    "buildings": 2,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.342185598414254,
+      -24.009313926663403,
+      -48.34118071370416,
+      -24.008433663949216
+    ],
+    "center_wgs84": [
+      -48.341683156059204,
+      -24.008873795306307
+    ]
+  },
+  {
+    "id": "tile_45_15",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, school building with playground, flagpole, yellow school bus, place of worship, main asphalt road with lane markings, traffic lights, school with students",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 20,
+    "classification": "urban_center",
+    "buildings": 2,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.32760130379639,
+      -24.015044790957614,
+      -48.32659645638715,
+      -24.014164426864877
+    ],
+    "center_wgs84": [
+      -48.32709888009177,
+      -24.014604608911245
+    ]
+  },
+  {
+    "id": "tile_15_26",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, school building with playground, flagpole, yellow school bus, hospital building with red cross, ambulance bay, emergency entrance, quiet residential street with sidewalks, trees, school with students",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 19,
+    "classification": "urban_center",
+    "buildings": 1,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.356791868197426,
+      -24.00448348166175,
+      -48.35578693834031,
+      -24.003603321364906
+    ],
+    "center_wgs84": [
+      -48.35628940326887,
+      -24.00404340151333
+    ]
+  },
+  {
+    "id": "tile_21_37",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, police, school building with playground, flagpole, yellow school bus, school with students",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 19,
+    "classification": "urban_center",
+    "buildings": 3,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.35064564527496,
+      -23.994694007535685,
+      -48.34964083703264,
+      -23.99381379283652
+    ],
+    "center_wgs84": [
+      -48.3501432411538,
+      -23.994253900186102
+    ]
+  },
+  {
+    "id": "tile_23_32",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, school building with playground, flagpole, yellow school bus, fire station, school with students",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 19,
+    "classification": "urban_center",
+    "buildings": 3,
+    "amenities": 2,
+    "bounds_wgs84": [
+      -48.348799526524374,
+      -23.99924532844651,
+      -48.3477946897816,
+      -23.99836510457402
+    ],
+    "center_wgs84": [
+      -48.34829710815299,
+      -23.998805216510263
+    ]
+  },
+  {
+    "id": "tile_24_18",
+    "prompt": "isometric pixel art city tile, SimCity 2000 style, 16-bit graphics, dithering, limited color palette, bird's eye view, residential houses with red tile roofs, small front yards, biergarten, quiet residential street with sidewalks, trees",
+    "negative": "blurry, smooth gradients, realistic, antialiased, modern 3D, high resolution, photo",
+    "priority": 19,
+    "classification": "urban_center",
+    "buildings": 1,
+    "amenities": 1,
+    "bounds_wgs84": [
+      -48.34814508330233,
+      -24.01189029585182,
+      -48.34714014067037,
+      -24.01101007926675
+    ],
+    "center_wgs84": [
+      -48.347642611986345,
+      -24.011450187559284
+    ]
+  }
+]

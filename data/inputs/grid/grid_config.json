@@ -1,0 +1,24 @@
+{
+  "name": "capao_bonito_centro",
+  "center_wgs84": [
+    -48.347,
+    -24.0056
+  ],
+  "bounds_wgs84": [
+    -48.372126462340795,
+    -24.0276031062575,
+    -48.32188205936224,
+    -23.98359176627181
+  ],
+  "tile_size_m": 100,
+  "tile_size_px": 512,
+  "grid_size": [
+    50,
+    50
+  ],
+  "total_tiles": 2500,
+  "tiles_with_content": 1580,
+  "total_buildings": 519,
+  "total_roads": 3834,
+  "crs_utm": "EPSG:32723"
+}

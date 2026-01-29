@@ -1,0 +1,19 @@
+{
+  "place": "Cap\u00e3o Bonito, S\u00e3o Paulo, Brazil",
+  "bounds": [
+    -48.5868836,
+    -24.2817503,
+    -47.953,
+    -23.8246091
+  ],
+  "area_km2": 1645.9054717433828,
+  "layers": {
+    "buildings": 2425,
+    "roads": 10859,
+    "water": 6783,
+    "landuse": 3207,
+    "amenity": 168,
+    "leisure": 83
+  },
+  "total_features": 23525
+}
