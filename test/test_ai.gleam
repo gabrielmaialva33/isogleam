@@ -1,0 +1,81 @@
+import gleam/int
+import gleam/io
+import gleam/option.{None}
+import gleam/string
+import isogleam/ffi/nvidia
+
+pub fn main() {
+  io.println("\n╔════════════════════════════════════════╗")
+  io.println("║   ISOGLEAM AI INTEGRATION TEST        ║")
+  io.println("╚════════════════════════════════════════╝\n")
+
+  let config = nvidia.default_config()
+
+  // Test 1: Health Check
+  io.println("🔍 Test 1: Health Check")
+  case nvidia.health_check(config) {
+    True -> io.println("✅ AI Server is online!\n")
+    False -> {
+      io.println("❌ AI Server is offline!")
+      io.println("   Run: python scripts/ai_server.py\n")
+    }
+  }
+
+  // Test 2: Generate Tile (simple prompt, no control image)
+  io.println("🎨 Test 2: Generate Tile (Text-to-Image)")
+  io.println("   Prompt: brick building with red roof")
+  io.println("   This will take ~2-3s on RTX 4090...\n")
+
+  case nvidia.generate_tile("brick building with red roof", None, 42, config) {
+    Ok(_image_b64) -> {
+      io.println("❌ Unexpected success - JSON parsing should fail!")
+      io.println("   (Client currently returns placeholder)\n")
+    }
+    Error(err) -> {
+      io.println("⚠️  Expected error (JSON parsing not implemented):")
+      io.println("   " <> err <> "\n")
+    }
+  }
+
+  // Test 3: CLIP Embedding
+  io.println("🧠 Test 3: CLIP Embedding")
+  case nvidia.clip_embed("fake_base64_for_testing", config) {
+    Ok(embedding) -> {
+      io.println("✅ CLIP embedding obtained!")
+      io.println(
+        "   Vector dimensions: " <> int.to_string(embedding.dimensions) <> "\n",
+      )
+    }
+    Error(err) -> {
+      io.println("⚠️  Expected error (JSON parsing not implemented):")
+      io.println("   " <> err <> "\n")
+    }
+  }
+
+  // Test 4: CLIP Classification
+  io.println("🏷️  Test 4: CLIP Classification")
+  case
+    nvidia.clip_classify("fake_base64", ["building", "tree", "water"], config)
+  {
+    Ok(classes) -> {
+      io.println("✅ Classification successful (placeholder)!")
+      let first = case classes {
+        [c, ..] -> c.label <> " (" <> string.inspect(c.confidence) <> ")"
+        [] -> "no results"
+      }
+      io.println("   First result: " <> first <> "\n")
+    }
+    Error(err) -> {
+      io.println("⚠️  Error:")
+      io.println("   " <> err <> "\n")
+    }
+  }
+
+  io.println("╔════════════════════════════════════════╗")
+  io.println("║   TEST SUITE COMPLETE                  ║")
+  io.println("║                                        ║")
+  io.println("║   NOTE: JSON parsing not yet           ║")
+  io.println("║   implemented, so most tests will      ║")
+  io.println("║   show expected errors.                ║")
+  io.println("╚════════════════════════════════════════╝\n")
+}
