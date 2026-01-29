@@ -2,3 +2,8 @@
 *.ez
 /build
 erl_crash.dump
+tmp
+data/outputs/
+output/
+viewer/tiles/
+cache/
