@@ -1,18 +1,14 @@
 /// IsoGleam Memory - Tile Storage
 /// Persistent storage for generated tiles using SQLite/Qdrant
-
 import gleam/dict.{type Dict}
 import gleam/list
 import gleam/option.{type Option, None, Some}
-import isogleam/tile.{type Tile, type IsoCoord, IsoCoord}
+import isogleam/core/tile.{type IsoCoord, type Tile, IsoCoord}
 
 /// In-memory tile store (for dev/testing)
 /// Production would use SQLite + Qdrant
 pub opaque type TileStore {
-  TileStore(
-    tiles: Dict(String, Tile),
-    metadata: Dict(String, TileMetadata),
-  )
+  TileStore(tiles: Dict(String, Tile), metadata: Dict(String, TileMetadata))
 }
 
 /// Tile metadata for search/retrieval
@@ -21,17 +17,15 @@ pub type TileMetadata {
     coord: IsoCoord,
     tile_type: String,
     score: Float,
-    generated_at: Int,  // Unix timestamp
+    generated_at: Int,
+    // Unix timestamp
     version: Int,
   )
 }
 
 /// Create empty store
 pub fn new() -> TileStore {
-  TileStore(
-    tiles: dict.new(),
-    metadata: dict.new(),
-  )
+  TileStore(tiles: dict.new(), metadata: dict.new())
 }
 
 /// Store a tile

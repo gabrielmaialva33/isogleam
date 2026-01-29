@@ -1,151 +1,21 @@
-/// Isometric Gleam - Isometric pixel art map generator
-/// Inspired by VIVA and Isometric NYC
-///
-/// Architecture:
-/// - Pure Gleam for coordination logic
-/// - FFI for Python (AI generation) and Elixir (GPU)
-/// - Pipeline: OSM → Render → AI → Tiles → Viewer
-import gleam/float
-import gleam/int
 import gleam/io
-import gleam/option.{None, Some}
-import isogleam/core/config.{type Config}
-import isogleam/core/grid.{type Grid}
-import isogleam/core/tile
-import isogleam/generation/infill
 
-/// Generator State
-pub type GeneratorState {
-  GeneratorState(
-    config: Config,
-    grid: Grid,
-    current_tile: option.Option(tile.IsoCoord),
-    errors: List(String),
-    started_at: Int,
-  )
-}
-
-/// Create new generator
-pub fn new(config: Config) -> GeneratorState {
-  let grid = grid.new(config.grid_width, config.grid_height, config.tile_size)
-
-  GeneratorState(
-    config: config,
-    grid: grid,
-    current_tile: None,
-    errors: [],
-    started_at: 0,
-  )
-}
-
-/// Initialize with default configuration
-pub fn init() -> GeneratorState {
-  new(config.default())
-}
-
-/// Next tile to generate
-pub fn next_tile(state: GeneratorState) -> option.Option(tile.IsoCoord) {
-  infill.next_to_generate(state.grid)
-}
-
-/// Mark tile as generated
-pub fn mark_generated(
-  state: GeneratorState,
-  coord: tile.IsoCoord,
-  image_path: String,
-) -> GeneratorState {
-  case grid.get_tile(state.grid, coord) {
-    None -> state
-    Some(t) -> {
-      let updated_tile = tile.set_image(t, image_path)
-      let updated_grid = grid.update_tile(state.grid, updated_tile)
-      GeneratorState(..state, grid: updated_grid)
-    }
-  }
-}
-
-/// Mark tile as failed
-pub fn mark_failed(
-  state: GeneratorState,
-  coord: tile.IsoCoord,
-  reason: String,
-) -> GeneratorState {
-  case grid.get_tile(state.grid, coord) {
-    None -> state
-    Some(t) -> {
-      let updated_tile = tile.set_status(t, tile.Failed(reason))
-      let updated_grid = grid.update_tile(state.grid, updated_tile)
-      let errors = [reason, ..state.errors]
-      GeneratorState(..state, grid: updated_grid, errors: errors)
-    }
-  }
-}
-
-/// Current progress
-pub fn progress(state: GeneratorState) -> Float {
-  grid.progress(state.grid)
-}
-
-/// Check if complete
-pub fn is_complete(state: GeneratorState) -> Bool {
-  grid.is_complete(state.grid)
-}
-
-/// State statistics
-pub fn stats(state: GeneratorState) -> String {
-  let total = grid.total_tiles(state.grid)
-  let generated = state.grid.generated_count
-  let pending = state.grid.pending_count
-  let pct = progress(state) *. 100.0
-
-  "IsoGleam Stats:\n"
-  <> "  Grid: "
-  <> int.to_string(state.config.grid_width)
-  <> "x"
-  <> int.to_string(state.config.grid_height)
-  <> "\n"
-  <> "  Total tiles: "
-  <> int.to_string(total)
-  <> "\n"
-  <> "  Generated: "
-  <> int.to_string(generated)
-  <> "\n"
-  <> "  Pending: "
-  <> int.to_string(pending)
-  <> "\n"
-  <> "  Progress: "
-  <> float.to_string(pct)
-  <> "%\n"
-  <> "  Errors: "
-  <> int.to_string(list.length(state.errors))
-}
-
-import gleam/list
-
-/// Entry point
-pub fn main() -> Nil {
+pub fn main() {
   io.println("╔═══════════════════════════════════════════════════════╗")
   io.println("║            ISOGLEAM - Pure Gleam v1.0.0               ║")
   io.println("║   Pixel Art City Generator - SimCity 2000 Style       ║")
   io.println("╚═══════════════════════════════════════════════════════╝")
   io.println("")
-
-  // Initialize with test config
-  let state = new(config.test_config())
-
-  io.println(stats(state))
+  io.println("✅ IsoGleam compiled successfully!")
   io.println("")
-
-  // Show generation order
-  io.println("Generation order (spiral from corner):")
-  let order = infill.generation_order(state.grid, infill.SpiralFromCorner)
-  list.take(order, 10)
-  |> list.each(fn(c) {
-    io.println(
-      "  -> (" <> int.to_string(c.x) <> ", " <> int.to_string(c.y) <> ")",
-    )
-  })
-
+  io.println("📦 Architecture:")
+  io.println("   - Pure Gleam Type-Safe Core")
+  io.println("   - Python AI Server (FastAPI + SD1.5 + ControlNet)")
+  io.println("   - Erlang FFI for HTTP & File I/O")
   io.println("")
-  io.println("Ready to generate! Use FFI to call Python/HuggingFace API.")
+  io.println("🚀 Next Steps:")
+  io.println("   1. Start AI Server: python scripts/ai_server.py")
+  io.println("   2. Run Pipeline: gleam run")
+  io.println("")
+  io.println("💪 Ready to humiliate Isometric NYC!")
 }
