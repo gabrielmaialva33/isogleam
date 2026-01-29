@@ -12,7 +12,7 @@ import gleam/option.{None, Some}
 import isogleam/core/config.{type Config}
 import isogleam/core/grid.{type Grid}
 import isogleam/core/tile
-import isogleam/infill
+import isogleam/generation/infill
 
 /// Estado do gerador
 pub type GeneratorState {
