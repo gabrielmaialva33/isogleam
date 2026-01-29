@@ -1,30 +1,30 @@
-/// Infill - Algoritmo de geração com contexto dos vizinhos
-/// SEGREDO do Isometric NYC: nunca gera tile isolado!
+/// Infill - Generation algorithm with neighbor context
+/// SECRET SAUCE of Isometric NYC: never generate isolated tiles!
 ///
-/// Estratégia:
-/// 1. Começa pelos cantos (menos vizinhos)
-/// 2. Expande em espiral para o centro
-/// 3. Cada tile gerado inclui bordas dos vizinhos como contexto
-/// 4. Máscara de 25% nas bordas para blending seamless
+/// Strategy:
+/// 1. Start from corners (fewest neighbors)
+/// 2. Spiral expansion towards the center
+/// 3. Each generated tile includes borders from neighbors as context
+/// 4. 25% mask on borders for seamless blending
 import gleam/int
 import gleam/list
 import gleam/option.{type Option, None, Some}
 import isogleam/core/grid.{type Grid}
 import isogleam/core/tile.{type IsoCoord, type Tile, Generated, IsoCoord}
 
-/// Estratégia de geração
+/// Generation Strategy
 pub type GenerationStrategy {
-  /// Começa pelo canto e expande (padrão)
+  /// Start from corner and expand (default)
   SpiralFromCorner
-  /// Começa pelo centro e expande
+  /// Start from center and expand
   SpiralFromCenter
-  /// Ordem aleatória (não recomendado)
+  /// Random order (not recommended)
   Random
-  /// Por linhas (mais simples, menos qualidade)
+  /// Row by row (simpler, lower quality)
   RowByRow
 }
 
-/// Contexto de infill para um tile
+/// Infill Context for a tile
 pub type InfillContext {
   InfillContext(
     target: Tile,
@@ -36,12 +36,12 @@ pub type InfillContext {
   )
 }
 
-/// Dados da borda de um tile vizinho
+/// Border data from a neighbor tile
 pub type BorderData {
   BorderData(image_path: String, edge: Edge, width: Int)
 }
 
-/// Qual borda do vizinho usar
+/// Which edge of the neighbor to use
 pub type Edge {
   TopEdge
   BottomEdge
@@ -49,7 +49,7 @@ pub type Edge {
   RightEdge
 }
 
-/// Ordem de geração dos tiles usando estratégia spiral
+/// Generation order using spiral strategy
 pub fn generation_order(g: Grid, strategy: GenerationStrategy) -> List(IsoCoord) {
   case strategy {
     SpiralFromCorner -> spiral_from_corner(g.width, g.height)
@@ -60,9 +60,9 @@ pub fn generation_order(g: Grid, strategy: GenerationStrategy) -> List(IsoCoord)
   }
 }
 
-/// Gera ordem espiral começando do canto (0,0)
+/// Generate spiral order starting from corner (0,0)
 fn spiral_from_corner(width: Int, height: Int) -> List(IsoCoord) {
-  // Implementação simplificada: prioriza tiles com menor x+y (distância do canto)
+  // Simplified implementation: prioritize tiles with lowest x+y (Manhattan distance from corner)
   let all_coords =
     list.range(0, width - 1)
     |> list.flat_map(fn(x) {
@@ -70,7 +70,7 @@ fn spiral_from_corner(width: Int, height: Int) -> List(IsoCoord) {
       |> list.map(fn(y) { IsoCoord(x, y) })
     })
 
-  // Ordena por distância Manhattan do canto (0,0)
+  // Sort by Manhattan distance from corner (0,0)
   list.sort(all_coords, fn(a, b) {
     let dist_a = a.x + a.y
     let dist_b = b.x + b.y
@@ -78,7 +78,7 @@ fn spiral_from_corner(width: Int, height: Int) -> List(IsoCoord) {
   })
 }
 
-/// Gera ordem espiral começando do centro
+/// Generate spiral order starting from center
 fn spiral_from_center(width: Int, height: Int) -> List(IsoCoord) {
   let center_x = width / 2
   let center_y = height / 2
@@ -90,7 +90,7 @@ fn spiral_from_center(width: Int, height: Int) -> List(IsoCoord) {
       |> list.map(fn(y) { IsoCoord(x, y) })
     })
 
-  // Ordena por distância do centro
+  // Sort by distance from center
   list.sort(all_coords, fn(a, b) {
     let dist_a = abs(a.x - center_x) + abs(a.y - center_y)
     let dist_b = abs(b.x - center_x) + abs(b.y - center_y)
@@ -105,7 +105,7 @@ fn abs(n: Int) -> Int {
   }
 }
 
-/// Gera ordem linha por linha
+/// Generate row by row order
 fn row_by_row(width: Int, height: Int) -> List(IsoCoord) {
   list.range(0, height - 1)
   |> list.flat_map(fn(y) {
@@ -114,7 +114,7 @@ fn row_by_row(width: Int, height: Int) -> List(IsoCoord) {
   })
 }
 
-/// Cria contexto de infill para um tile
+/// Create infill context for a tile
 pub fn create_context(
   g: Grid,
   coord: IsoCoord,
@@ -123,7 +123,7 @@ pub fn create_context(
   case grid.get_tile(g, coord) {
     None -> None
     Some(target) -> {
-      // Buscar bordas dos vizinhos gerados
+      // Get generated neighbor borders
       let north = get_neighbor_border(g, target.neighbors.north, BottomEdge)
       let south = get_neighbor_border(g, target.neighbors.south, TopEdge)
       let east = get_neighbor_border(g, target.neighbors.east, LeftEdge)
@@ -141,7 +141,7 @@ pub fn create_context(
   }
 }
 
-/// Busca borda de um vizinho se ele já foi gerado
+/// Get neighbor border if generated
 fn get_neighbor_border(
   g: Grid,
   maybe_coord: Option(IsoCoord),
@@ -162,7 +162,7 @@ fn get_neighbor_border(
                     image_path: path,
                     edge: edge,
                     width: 128,
-                    // 25% de 512px
+                    // 25% of 512px
                   ))
               }
             }
@@ -174,7 +174,7 @@ fn get_neighbor_border(
   }
 }
 
-/// Conta quantas bordas de contexto um tile tem
+/// Count how many context borders a tile has
 pub fn context_count(ctx: InfillContext) -> Int {
   let count = fn(b: Option(BorderData)) -> Int {
     case b {
@@ -189,12 +189,12 @@ pub fn context_count(ctx: InfillContext) -> Int {
   + count(ctx.west_border)
 }
 
-/// Verifica se tile pode ser gerado (tem contexto suficiente ou é canto)
+/// Check if tile can be generated (has enough context or is corner)
 pub fn can_generate(g: Grid, coord: IsoCoord) -> Bool {
   case grid.get_tile(g, coord) {
     None -> False
     Some(t) -> {
-      // Cantos sempre podem gerar (não têm todos os vizinhos)
+      // Corners can always generate (they don't have full neighbors)
       let is_corner =
         { coord.x == 0 || coord.x == g.width - 1 }
         && { coord.y == 0 || coord.y == g.height - 1 }
@@ -202,7 +202,7 @@ pub fn can_generate(g: Grid, coord: IsoCoord) -> Bool {
       case is_corner {
         True -> True
         False -> {
-          // Precisa de pelo menos 1 vizinho gerado
+          // Needs at least 1 generated neighbor
           grid.count_generated_neighbors(g, t) >= 1
         }
       }
@@ -210,11 +210,11 @@ pub fn can_generate(g: Grid, coord: IsoCoord) -> Bool {
   }
 }
 
-/// Próximo tile a gerar baseado na estratégia de infill
+/// Next tile to generate based on infill strategy
 pub fn next_to_generate(g: Grid) -> Option(IsoCoord) {
   let order = generation_order(g, SpiralFromCorner)
 
-  // Encontrar primeiro tile que pode ser gerado
+  // Find first tile that can be generated
   list.find(order, fn(coord) {
     case grid.get_tile(g, coord) {
       None -> False

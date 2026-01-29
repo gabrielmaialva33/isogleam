@@ -1,10 +1,10 @@
-/// Isometric Gleam - Gerador de mapas pixel art isométricos
-/// Inspirado no VIVA e no Isometric NYC
+/// Isometric Gleam - Isometric pixel art map generator
+/// Inspired by VIVA and Isometric NYC
 ///
-/// Arquitetura:
-/// - Pure Gleam para lógica de coordenação
-/// - FFI para Python (geração IA) e Elixir (GPU)
-/// - Pipeline: OSM → Render → IA → Tiles → Viewer
+/// Architecture:
+/// - Pure Gleam for coordination logic
+/// - FFI for Python (AI generation) and Elixir (GPU)
+/// - Pipeline: OSM → Render → AI → Tiles → Viewer
 import gleam/float
 import gleam/int
 import gleam/io
@@ -14,7 +14,7 @@ import isogleam/core/grid.{type Grid}
 import isogleam/core/tile
 import isogleam/generation/infill
 
-/// Estado do gerador
+/// Generator State
 pub type GeneratorState {
   GeneratorState(
     config: Config,
@@ -25,7 +25,7 @@ pub type GeneratorState {
   )
 }
 
-/// Cria novo gerador
+/// Create new generator
 pub fn new(config: Config) -> GeneratorState {
   let grid = grid.new(config.grid_width, config.grid_height, config.tile_size)
 
@@ -38,17 +38,17 @@ pub fn new(config: Config) -> GeneratorState {
   )
 }
 
-/// Inicializa com configuração padrão
+/// Initialize with default configuration
 pub fn init() -> GeneratorState {
   new(config.default())
 }
 
-/// Próximo tile a gerar
+/// Next tile to generate
 pub fn next_tile(state: GeneratorState) -> option.Option(tile.IsoCoord) {
   infill.next_to_generate(state.grid)
 }
 
-/// Marca tile como gerado
+/// Mark tile as generated
 pub fn mark_generated(
   state: GeneratorState,
   coord: tile.IsoCoord,
@@ -64,7 +64,7 @@ pub fn mark_generated(
   }
 }
 
-/// Marca tile como falhou
+/// Mark tile as failed
 pub fn mark_failed(
   state: GeneratorState,
   coord: tile.IsoCoord,
@@ -81,17 +81,17 @@ pub fn mark_failed(
   }
 }
 
-/// Progresso atual
+/// Current progress
 pub fn progress(state: GeneratorState) -> Float {
   grid.progress(state.grid)
 }
 
-/// Verifica se completo
+/// Check if complete
 pub fn is_complete(state: GeneratorState) -> Bool {
   grid.is_complete(state.grid)
 }
 
-/// Estatísticas do estado
+/// State statistics
 pub fn stats(state: GeneratorState) -> String {
   let total = grid.total_tiles(state.grid)
   let generated = state.grid.generated_count
@@ -130,13 +130,13 @@ pub fn main() -> Nil {
   io.println("╚═══════════════════════════════════════════════════════╝")
   io.println("")
 
-  // Inicializa com config de teste
+  // Initialize with test config
   let state = new(config.test_config())
 
   io.println(stats(state))
   io.println("")
 
-  // Mostra ordem de geração
+  // Show generation order
   io.println("Generation order (spiral from corner):")
   let order = infill.generation_order(state.grid, infill.SpiralFromCorner)
   list.take(order, 10)

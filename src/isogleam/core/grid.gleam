@@ -1,5 +1,5 @@
-/// Grid - Gerenciamento do grid de tiles isométricos
-/// Inspirado em memory/world.gleam do VIVA
+/// Grid - Isometric tile grid management
+/// Inspired by memory/world.gleam from VIVA
 import gleam/dict.{type Dict}
 import gleam/int
 import gleam/list
@@ -8,7 +8,7 @@ import isogleam/core/tile.{
   type IsoCoord, type Tile, type TileStatus, Generated, IsoCoord, Pending,
 }
 
-/// Grid de tiles
+/// Tile Grid
 pub type Grid {
   Grid(
     tiles: Dict(String, Tile),
@@ -20,7 +20,7 @@ pub type Grid {
   )
 }
 
-/// Cria grid vazio
+/// Create empty grid
 pub fn new(width: Int, height: Int, tile_size: Int) -> Grid {
   let tiles =
     list.range(0, width - 1)
@@ -44,7 +44,7 @@ pub fn new(width: Int, height: Int, tile_size: Int) -> Grid {
   )
 }
 
-/// Define vizinhos de um tile baseado nas bordas do grid
+/// Set neighbors for a tile based on grid boundaries
 fn set_tile_neighbors(t: Tile, width: Int, height: Int) -> Tile {
   let x = t.coord.x
   let y = t.coord.y
@@ -69,23 +69,23 @@ fn set_tile_neighbors(t: Tile, width: Int, height: Int) -> Tile {
   tile.set_neighbors(t, north, south, east, west)
 }
 
-/// Converte coordenada para chave do dict
+/// Convert coordinate to dictionary key
 fn coord_to_key(c: IsoCoord) -> String {
   "tile_" <> int.to_string(c.x) <> "_" <> int.to_string(c.y)
 }
 
-/// Busca tile por coordenada
+/// Get tile by coordinate
 pub fn get_tile(grid: Grid, coord: IsoCoord) -> Option(Tile) {
   dict.get(grid.tiles, coord_to_key(coord))
   |> option.from_result
 }
 
-/// Busca tile por x, y
+/// Get tile by x, y
 pub fn get(grid: Grid, x: Int, y: Int) -> Option(Tile) {
   get_tile(grid, IsoCoord(x, y))
 }
 
-/// Atualiza tile no grid
+/// Update tile in grid
 pub fn update_tile(grid: Grid, t: Tile) -> Grid {
   let key = tile.id(t)
   let old_tile = dict.get(grid.tiles, key)
@@ -117,7 +117,7 @@ pub fn update_tile(grid: Grid, t: Tile) -> Grid {
   )
 }
 
-/// Lista tiles pendentes
+/// List pending tiles
 pub fn pending_tiles(grid: Grid) -> List(Tile) {
   dict.values(grid.tiles)
   |> list.filter(fn(t) {
@@ -128,7 +128,7 @@ pub fn pending_tiles(grid: Grid) -> List(Tile) {
   })
 }
 
-/// Lista tiles gerados
+/// List generated tiles
 pub fn generated_tiles(grid: Grid) -> List(Tile) {
   dict.values(grid.tiles)
   |> list.filter(fn(t) {
@@ -139,7 +139,7 @@ pub fn generated_tiles(grid: Grid) -> List(Tile) {
   })
 }
 
-/// Progresso da geração (0.0 a 1.0)
+/// Generation progress (0.0 to 1.0)
 pub fn progress(grid: Grid) -> Float {
   let total = grid.width * grid.height
   case total {
@@ -148,21 +148,21 @@ pub fn progress(grid: Grid) -> Float {
   }
 }
 
-/// Total de tiles
+/// Total tiles
 pub fn total_tiles(grid: Grid) -> Int {
   grid.width * grid.height
 }
 
-/// Verifica se grid está completo
+/// Check if grid is complete
 pub fn is_complete(grid: Grid) -> Bool {
   grid.pending_count == 0
 }
 
-/// Busca próximo tile para gerar (priorizando tiles com mais vizinhos gerados)
+/// Get next tile to generate (prioritizing tiles with more generated neighbors)
 pub fn next_tile_to_generate(grid: Grid) -> Option(Tile) {
   let pending = pending_tiles(grid)
 
-  // Ordenar por número de vizinhos gerados (mais vizinhos = maior prioridade)
+  // Sort by number of generated neighbors (more neighbors = higher priority)
   let scored =
     list.map(pending, fn(t) {
       let score = count_generated_neighbors(grid, t)
@@ -172,7 +172,7 @@ pub fn next_tile_to_generate(grid: Grid) -> Option(Tile) {
   let sorted =
     list.sort(scored, fn(a, b) {
       int.compare(b.0, a.0)
-      // Decrescente
+      // Descending
     })
 
   case sorted {
@@ -181,7 +181,7 @@ pub fn next_tile_to_generate(grid: Grid) -> Option(Tile) {
   }
 }
 
-/// Conta vizinhos gerados de um tile
+/// Count generated neighbors of a tile
 pub fn count_generated_neighbors(grid: Grid, t: Tile) -> Int {
   let check = fn(maybe_coord: Option(IsoCoord)) -> Int {
     case maybe_coord {
@@ -206,7 +206,7 @@ pub fn count_generated_neighbors(grid: Grid, t: Tile) -> Int {
   + check(t.neighbors.west)
 }
 
-/// Serializa grid para JSON (para persistência)
+/// Serialize grid to JSON (for persistence)
 pub fn to_json(grid: Grid) -> String {
   let tiles_json =
     dict.values(grid.tiles)
